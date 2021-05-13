@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.revature.dto.PostReviewDTO;
+
 @Entity
 @Table(name="glb_reviews")
 public class Review {
@@ -52,6 +54,15 @@ public class Review {
 			this.hoursPlayed = hoursPlayed;
 			this.completionStatus = completionStatus;
 			this.gameID = gameID;
+		}
+		
+		public Review(PostReviewDTO reviewDTO) {
+			this.user = reviewDTO.getUser();
+			this.rating = reviewDTO.getRating();
+			this.description = reviewDTO.getDescription();
+			this.hoursPlayed = reviewDTO.getHoursPlayed();
+			this.completionStatus = reviewDTO.getCompletionStatus();
+			this.gameID = reviewDTO.getGameID();
 		}
 
 		public int getReviewID() {

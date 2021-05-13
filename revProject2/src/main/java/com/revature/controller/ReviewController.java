@@ -8,14 +8,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.revature.annotations.LoggedInOnly;
+import com.revature.dto.MessageDTO;
+import com.revature.dto.PostReviewDTO;
+import com.revature.exception.BadParameterException;
+import com.revature.exception.DatabaseException;
+import com.revature.exception.EmptyParameterException;
+import com.revature.exception.ReviewAddException;
+import com.revature.exception.ReviewNotFoundException;
+import com.revature.model.Review;
 import com.revature.service.LoginService;
 import com.revature.service.ReviewService;
 
 @Controller // This is a stereotype annotation, just like @Component, @Service, @Repository
 // What those annotations are for, is to have Spring register it as a Spring Bean
 public class ReviewController {
-/*
+
 	@Autowired
 	private ReviewService reviewService;
 	
@@ -26,7 +37,7 @@ public class ReviewController {
 	
 	@GetMapping(path = "review/{id}")
 	@LoggedInOnly
-	public ResponseEntity<Object> getReviewById(@PathVariable("id") int id) {
+	public ResponseEntity<Object> getReviewById(@PathVariable("id") String id) {
 		
 		/*
 		 * The code below seems like a cross cutting concern
@@ -42,10 +53,10 @@ public class ReviewController {
 //		} else {
 //			System.out.println(session.getAttribute("loggedInUser"));
 //		}
-	/*	
+		
 		try {
 			
-			//Review review = reviewService.getReviewById(id);
+			Review review = reviewService.getReviewByID(id);
 			
 			return ResponseEntity.status(200).body(review);
 			
@@ -53,25 +64,30 @@ public class ReviewController {
 			
 			return ResponseEntity.status(404).body(new MessageDTO("Review with id " + id + " was not found"));
 		
+		} catch (BadParameterException e) {
+			return ResponseEntity.status(400).body(new MessageDTO("User provided a bad parameter"));
+		} catch (EmptyParameterException e) {
+			return ResponseEntity.status(400).body(new MessageDTO("User provided an empty parameter"));
 		}
 		
 	}
 	
 	@PostMapping(path = "review")
 	@LoggedInOnly
-	public ResponseEntity<Object> addReview(@RequestBody ReviewTemplate reviewTemplate) {
+	public ResponseEntity<Object> addReview(@RequestBody PostReviewDTO reviewDTO) {
 		
 		try {
-			Review review = reviewService.addReview(reviewTemplate);
+			Review review;
+
+			review = reviewService.postNewReview(reviewDTO);
 			
 			return ResponseEntity.status(201).body(review);
-		} catch (ReviewCreationException e) {
-			
-			return ResponseEntity
-					.status(500)
-					.body(new MessageDTO("Unable to create review in the database!"));
+		} catch (ReviewAddException e) {
+			return ResponseEntity.status(500).body(new MessageDTO("Unable to create review in the database!"));
+		} catch (BadParameterException e) {
+			return ResponseEntity.status(400).body(new MessageDTO("User provided a bad parameter"));
 		}
 		
 	}
-	*/
+	
 }

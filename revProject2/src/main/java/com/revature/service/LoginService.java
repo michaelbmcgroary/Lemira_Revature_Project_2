@@ -1,7 +1,6 @@
 package com.revature.service;
 
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +69,7 @@ public class LoginService {
 			user = userRepository.addUser(user);
 			return user;
 		} catch (DatabaseException e) {
-			throw new UserAddException("User could not be added to the database");
+			throw new UserAddException(e.getMessage());
 		}
 	}
 
