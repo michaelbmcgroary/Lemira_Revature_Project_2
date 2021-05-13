@@ -1,5 +1,11 @@
 package com.revature.service;
 
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.revature.dao.UserRepository;
 import com.revature.dto.LoginDTO;
 import com.revature.dto.PostUserDTO;
@@ -12,8 +18,10 @@ import com.revature.exception.UserAddException;
 import com.revature.exception.UserNotFoundException;
 import com.revature.model.User;
 
+@Service
 public class LoginService {
 	
+	@Autowired
 	private UserRepository userRepository;
 	
 	public LoginService() throws DatabaseException {
@@ -25,6 +33,7 @@ public class LoginService {
 		this.userRepository = userRepository;
 	}
 	
+	@Transactional(rollbackFor = {UserNotFoundException.class, BadPasswordException.class})
 	public User login(LoginDTO loginDTO) throws BadParameterException, LoginException {
 		if(loginDTO.getUsername().isBlank()) {
 			throw new BadParameterException("Cannot have blank username or password");

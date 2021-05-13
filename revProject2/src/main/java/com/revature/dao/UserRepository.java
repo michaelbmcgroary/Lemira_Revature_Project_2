@@ -3,11 +3,16 @@ package com.revature.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.revature.dto.LoginDTO;
 import com.revature.exception.BadPasswordException;
@@ -16,12 +21,14 @@ import com.revature.exception.UserNotFoundException;
 import com.revature.model.User;
 import com.revature.model.UserStatus;
 import com.revature.model.UserType;
-import com.revature.util.SessionUtility;
 
+@Repository
+@Transactional
 public class UserRepository {
 
-	//USE THIS SOMEWHERE
-	@SuppressWarnings("unused")
+	@Autowired
+	private SessionFactory sessionFactory;
+	
 	private Logger logger = LoggerFactory.getLogger(UserRepository.class);
 	
 	//add in fake data for now and replace with SQL later
@@ -39,7 +46,7 @@ public class UserRepository {
 		//if the password is not correct, return a user with an ID of -2 and null values for the rest
 		
 		try {
-			Session session = SessionUtility.getSession();
+			Session session = sessionFactory.getCurrentSession();
 			@SuppressWarnings("rawtypes")
 			Query query = session.createQuery("from User u WHERE u.username = :un AND u.password = :pw");
 			query.setParameter("un", loginDTO.getUsername());
@@ -48,7 +55,7 @@ public class UserRepository {
 			return retUser;
 		} catch (javax.persistence.NoResultException e) {
 			try {
-				Session session = SessionUtility.getSession();
+				Session session = sessionFactory.getCurrentSession();
 				@SuppressWarnings("rawtypes")
 				Query query = session.createQuery("from User u WHERE u.username = :un");
 				query.setParameter("un", loginDTO.getUsername());
@@ -63,7 +70,7 @@ public class UserRepository {
 	public User addUser(User user) throws DatabaseException {
 		//may replace user with a DTO that doesn't include the id
 		try {
-			Session session = SessionUtility.getSession();
+			Session session = sessionFactory.getCurrentSession();
 			Transaction tx = session.beginTransaction();
 			tx.commit();
 			user.setUserType(new UserType(1));
@@ -87,7 +94,7 @@ public class UserRepository {
 	
 	public boolean isModerator(LoginDTO loginDTO) throws DatabaseException {
 		try {
-			Session session = SessionUtility.getSession();
+			Session session = sessionFactory.getCurrentSession();
 			@SuppressWarnings("rawtypes")
 			Query query = session.createQuery("select userType from User u WHERE u.username = :un AND u.password = :pw");
 			query.setParameter("un", loginDTO.getUsername());
@@ -106,7 +113,7 @@ public class UserRepository {
 
 
 	public List<User> getAllUsers() {
-		Session session = SessionUtility.getSession();
+		Session session = sessionFactory.getCurrentSession();
 		List<User> userList = session.createQuery("from User", User.class).getResultList();
 		return userList;
 	}

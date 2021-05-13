@@ -5,9 +5,14 @@ import java.security.NoSuchAlgorithmException;
 
 import com.revature.exception.PasswordHashException;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginDTO {
 
+	@NotBlank
 	private String username;
+	
+	@NotBlank
 	private String password;
 	
 	public LoginDTO() {
