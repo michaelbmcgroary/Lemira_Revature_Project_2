@@ -53,7 +53,7 @@ class UserRepositoryUnitTest {
 		//Rollback(false) and @Commit mean that the changes won't be thrown out after the test
 		//use that to populate and the do a get test
 		
-		//@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+		//DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 		//This gets rid of the current context at the end of the method and creates a new database
 		//Bach's notes have a bit more on this
 		
