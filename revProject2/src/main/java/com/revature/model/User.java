@@ -26,7 +26,7 @@ public class User {
 	@Column(name = "userID")
 	private int userID;
 	
-	@Column(name = "username", length=50)
+	@Column(name = "username", length=50, unique = true)
 	private String username;
 	
 	@Column(name = "password", length=50)
@@ -38,7 +38,7 @@ public class User {
 	@Column(name = "user_lastname", length=100)
 	private String lastName;
 	
-	@Column(name = "user_email", length=150)
+	@Column(name = "user_email", length=150, unique = true)
 	private String email;
 
 	@ManyToOne
