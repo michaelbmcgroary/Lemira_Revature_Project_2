@@ -33,7 +33,7 @@ public class SpringORMHibernateConfig {
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
-		dataSource.setUrl(env.getProperty("db_url_proj_2"));
+		dataSource.setUrl(env.getProperty("jdbc.url"));
 		dataSource.setUsername(env.getProperty("db_username_proj_2"));
 		dataSource.setPassword(env.getProperty("db_password_proj_2"));
 		return dataSource;
