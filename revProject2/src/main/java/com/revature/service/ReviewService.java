@@ -66,7 +66,7 @@ public class ReviewService {
 	public Review getReviewByID(String id) throws ReviewNotFoundException, BadParameterException, EmptyParameterException {
 		Review review = null;
 		try {
-			if(id.isBlank()) {
+			if(id.trim().equals("")) {
 				throw new EmptyParameterException("The Review ID was left blank");
 			}
 			int reviewID = Integer.parseInt(id);
@@ -86,10 +86,10 @@ public class ReviewService {
 		
 		List<Review> reviewList = null;
 		try {
-			if(login.getUsername().isBlank()) {
+			if(login.getUsername().trim().equals("")) {
 				throw new EmptyParameterException("The username of the logged in user was not found");
 			}
-			if(login.getPassword().isBlank()) {
+			if(login.getPassword().trim().equals("")) {
 				throw new EmptyParameterException("The password of the logged in user was not found");
 			}
 			reviewList = reviewRepo.getAllReviews(login);
@@ -106,7 +106,7 @@ public class ReviewService {
 	public List<Review> getReviewsByUser(String username) throws ReviewNotFoundException, EmptyParameterException, PasswordHashException, BadPasswordException, UserNotFoundException{
 		List<Review> reviewList = null;
 		try {
-			if(username.isBlank()) {
+			if(username.trim().equals("")) {
 				throw new EmptyParameterException("The username of the user");
 			}
 			reviewList = reviewRepo.getReviewsByUser(username);

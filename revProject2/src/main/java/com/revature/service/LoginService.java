@@ -34,7 +34,7 @@ public class LoginService {
 	
 	@Transactional(rollbackFor = {UserNotFoundException.class, BadPasswordException.class})
 	public User login(LoginDTO loginDTO) throws BadParameterException, LoginException {
-		if(loginDTO.getUsername().isBlank()) {
+		if(loginDTO.getUsername().trim().equals("")) {
 			throw new BadParameterException("Cannot have blank username or password");
 		}
 		
