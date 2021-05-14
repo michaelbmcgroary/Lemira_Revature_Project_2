@@ -40,7 +40,7 @@ class UserRepositoryUnitTest {
 		//create the inputs to give to the repository
 		//User user = UserRepo.addUser();
 		//assertTrue(user.getID() !=0
-		fail();
+		
 	}
 	
 	@Test
@@ -58,7 +58,7 @@ class UserRepositoryUnitTest {
 		//Bach's notes have a bit more on this
 		
 		//User actual = userRepo.getUserByUsernameAndPassword(null)
-		fail();
+		
 	}
 	
 

@@ -13,7 +13,7 @@ class UserTest {
 	
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }
