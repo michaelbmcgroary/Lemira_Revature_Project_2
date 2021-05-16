@@ -10,7 +10,7 @@ public class Application {
 	
 	public static void main(String[] args) throws PasswordHashException {
 		
-		User user = new User(1, "Username", "Password123*", "George", "Lucas", "glucas@gmail.com", new UserType(1), new UserStatus(1));
+		User user = new User(1, "Username", "YoThisIsMyPassword", "George", "Lucas", "glucas@gmail.com", new UserType(1), new UserStatus(1));
 		System.out.println(user.getPassword());
 		
 	}

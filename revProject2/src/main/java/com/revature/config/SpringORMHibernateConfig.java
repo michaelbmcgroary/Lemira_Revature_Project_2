@@ -48,7 +48,7 @@ public class SpringORMHibernateConfig {
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
 		hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
-		
+		sessionFactory.setHibernateProperties(hibernateProperties);
 		return sessionFactory;
 	}
 	

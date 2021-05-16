@@ -41,7 +41,7 @@ public class AuthorizationAspect {
 	@Around("@annotation(com.revature.annotations.ModeratorOnly)")
 	public ResponseEntity<Object> protectEndpointForModeratorsOnly(ProceedingJoinPoint pjp) throws Throwable {
 		HttpSession session = request.getSession(false);
-		if(session == null || ((User) session.getAttribute("currentlyLoggedInUser")).getUserType() == new UserType(1)) {
+		if(session == null || ((User) session.getAttribute("currentlyLoggedInUser")).getUserType().equals(new UserType(1))) {
 			return ResponseEntity.status(401).body(new MessageDTO("You must be a Moderator to access this resource"));
 		}
 		@SuppressWarnings("unchecked")
@@ -52,7 +52,7 @@ public class AuthorizationAspect {
 	@Around("@annotation(com.revature.annotations.UnbannedOnly)")
 	public ResponseEntity<Object> protectEndpointForActiveUsersOnly(ProceedingJoinPoint pjp) throws Throwable {
 		HttpSession session = request.getSession(false);
-		if(session == null || ((User) session.getAttribute("currentlyLoggedInUser")).getUserStatus() == new UserStatus(2)) {
+		if(session == null || ((User) session.getAttribute("currentlyLoggedInUser")).getUserStatus().equals(new UserStatus(2))) {
 			return ResponseEntity.status(401).body(new MessageDTO("You must be an unbanned user to access this resource"));
 		}
 		@SuppressWarnings("unchecked")

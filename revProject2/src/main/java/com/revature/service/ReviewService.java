@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class ReviewService {
 		this.reviewRepo = reviewRepository;
 	}
 	
-	@LoggedInOnly
+	
 	public Review postNewReview(PostReviewDTO reviewDTO) throws ReviewAddException, BadParameterException {
 		//culprit figures out which exception to throw, may add after I figure out the controller layer
 		//int culprit = 0;
@@ -49,6 +50,7 @@ public class ReviewService {
 			//review.setAmount(Double.parseDouble(reviewDTO.getAmount()));
 			//keep this function commented out because I need to do string parsing
 			review = reviewRepo.newReview(review);
+			System.out.println(review);
 			return review;
 		} catch (DatabaseException e) {
 			throw new ReviewAddException(e.getMessage());
@@ -102,17 +104,33 @@ public class ReviewService {
 	}
 	
 
-	@LoggedInOnly
-	public List<Review> getReviewsByUser(String username) throws ReviewNotFoundException, EmptyParameterException, PasswordHashException, BadPasswordException, UserNotFoundException{
+	
+	public List<Review> getReviewsByUser(String username) throws ReviewNotFoundException, EmptyParameterException, UserNotFoundException{
 		List<Review> reviewList = null;
 		try {
 			if(username.trim().equals("")) {
-				throw new EmptyParameterException("The username of the user");
+				throw new EmptyParameterException("The username of the user was left blank");
 			}
 			reviewList = reviewRepo.getReviewsByUser(username);
 			return reviewList;
 		} catch (DatabaseException e) {
 			throw new ReviewNotFoundException("No Reviews could be found");
+		}
+	}
+
+	public ArrayList<Review> getReviewsByGame(String id) throws ReviewNotFoundException, BadParameterException, EmptyParameterException {
+		List<Review> reviewList = null;
+		try {
+			if(id.trim().equals("")) {
+				throw new EmptyParameterException("No id was provided for the game");
+			}
+			int gameID = Integer.parseInt(id);
+			reviewList = reviewRepo.getReviewsByGame(gameID);
+			return (ArrayList<Review>) reviewList;
+		} catch (DatabaseException e) {
+			throw new ReviewNotFoundException("No Reviews could be found");
+		} catch (NumberFormatException e) {
+			throw new BadParameterException("Game ID must be a number value");
 		}
 	}
 	

@@ -38,7 +38,6 @@ public class Review {
 		@JoinColumn(name = "review_completion_status_id")
 		private ReviewStatus completionStatus;
 		
-		//Change this to a join column after getting the games from an API if needed
 		@Column(name = "game_id")
 		private int gameID;
 

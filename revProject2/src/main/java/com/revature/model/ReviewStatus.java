@@ -15,10 +15,10 @@ public class ReviewStatus {
 
 		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
-		@Column(name = "review_status_id")
+		@Column(name = "review_completion_status_id")
 		private int statusID;
 		
-		@Column(name = "review_status", length=10)
+		@Column(name = "review_completion_status", length=20)
 		private String status;
 		
 		public ReviewStatus() {

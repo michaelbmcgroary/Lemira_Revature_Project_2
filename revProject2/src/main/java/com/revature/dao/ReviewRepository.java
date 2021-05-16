@@ -45,13 +45,18 @@ public class ReviewRepository {
 			Session session = sessionFactory.getCurrentSession();
 			//Time stamp may be set before but this is a more accurate time as it will be recorded at the time it enters the database
 			review.setReviewID(0);
-			session.persist(session);
+			session.persist(review);
+			
+			
+			
 			@SuppressWarnings("rawtypes")
-			Query query = session.createQuery("from Review r WHERE r.userID = :uid AND r.description = :desc AND r.gameID = :gid ");
-			query.setParameter("uid", review.getUser().getUserID());
+			Query query = session.createQuery("from Review r WHERE r.user = :uid AND r.description = :desc AND r.gameID = :gid");
+			query.setParameter("uid", review.getUser());
 			query.setParameter("desc", review.getDescription());
 			query.setParameter("gid", review.getGameID());
-			return review;
+			Review retReview = (Review) query.getSingleResult();
+			//System.out.println("HEY PAY ATTENTION TO ME: " + retReview);
+			return retReview;
 		} catch (javax.persistence.NoResultException e) {
 			throw new DatabaseException("Review could not be added. Exception message is: " + e.getMessage());
 		} catch (javax.persistence.PersistenceException e) {
@@ -100,6 +105,20 @@ public class ReviewRepository {
 			reviewList = session.createQuery("from Review WHERE userID = " + userID, Review.class).getResultList();
 		} catch (DatabaseException e) {
 			throw new DatabaseException(e.getMessage());
+		}
+		
+		return reviewList;
+	}
+
+
+	public List<Review> getReviewsByGame(int gameID) throws DatabaseException {
+		List<Review> reviewList = null;
+		try {
+			reviewList = new ArrayList<Review>();
+			Session session = sessionFactory.getCurrentSession();
+			reviewList = session.createQuery("from Review WHERE gameID = " + gameID, Review.class).getResultList();
+		} catch (javax.persistence.NoResultException e) {
+			throw new DatabaseException("No Reviews exist for this game");
 		}
 		
 		return reviewList;
