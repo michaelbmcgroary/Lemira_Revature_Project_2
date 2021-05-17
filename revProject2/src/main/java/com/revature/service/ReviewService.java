@@ -82,24 +82,16 @@ public class ReviewService {
 	}
 	
 	
-	public List<Review> getAllReviews(LoginDTO login) throws ReviewNotFoundException, EmptyParameterException{
+	public List<Review> getAllReviews() throws ReviewNotFoundException {
 		
 		//GET RID OF THE NEED FOR LOGIN
 		
 		List<Review> reviewList = null;
 		try {
-			if(login.getUsername().trim().equals("")) {
-				throw new EmptyParameterException("The username of the logged in user was not found");
-			}
-			if(login.getPassword().trim().equals("")) {
-				throw new EmptyParameterException("The password of the logged in user was not found");
-			}
-			reviewList = reviewRepo.getAllReviews(login);
+			reviewList = reviewRepo.getAllReviews();
 			return reviewList;
 		} catch (DatabaseException e) {
 			throw new ReviewNotFoundException("No Reviews could be found");
-		} catch (NotModeratorException e) {
-			throw new ReviewNotFoundException("The login credentials are not for a finance manager");
 		}
 	}
 	

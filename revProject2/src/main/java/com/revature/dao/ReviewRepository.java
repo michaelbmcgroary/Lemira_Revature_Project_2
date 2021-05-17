@@ -77,12 +77,8 @@ public class ReviewRepository {
 	}
 	
 	
-	public List<Review> getAllReviews(LoginDTO user) throws NotModeratorException, DatabaseException{
-		if(userRepository.isModerator(user) == false) {
-			throw new NotModeratorException();
-		}
+	public List<Review> getAllReviews() throws DatabaseException{
 		List<Review> reviewList = null;
-		
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			reviewList = session.createQuery("from Review", Review.class).getResultList();

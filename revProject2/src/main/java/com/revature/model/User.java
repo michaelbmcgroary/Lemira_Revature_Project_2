@@ -92,7 +92,7 @@ public class User {
 	        	case 2: throw new PasswordHashException("There was an error when hashing the password upon setting the password after User's creation");
 	        	default: throw new PasswordHashException("There was an error when hashing the password and method was called from unknown source");
 	        }
-	    }
+	    } //May add in a catch for null pointer exception for a null value being sent in
 		return hashedPassword;
 	}
 

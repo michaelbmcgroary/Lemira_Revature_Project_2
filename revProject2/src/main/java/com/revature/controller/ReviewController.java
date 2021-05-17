@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.revature.annotations.LoggedInOnly;
+import com.revature.annotations.ModeratorOnly;
 import com.revature.annotations.UnbannedOnly;
 import com.revature.dto.DisplayReview;
 import com.revature.dto.MessageDTO;
@@ -33,8 +34,10 @@ import com.revature.model.User;
 import com.revature.service.LoginService;
 import com.revature.service.ReviewService;
 
-@CrossOrigin(allowCredentials = "true", origins = "http://localhost:4200")
 
+//@CrossOrigin(allowCredentials = "true", origins = "*", allowedHeaders = "*")
+@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @Controller // This is a stereotype annotation, just like @Component, @Service, @Repository
 // What those annotations are for, is to have Spring register it as a Spring Bean
 public class ReviewController {
@@ -51,21 +54,6 @@ public class ReviewController {
 	@LoggedInOnly
 	public ResponseEntity<Object> getReviewById(@PathVariable("id") String id) {
 		
-		/*
-		 * The code below seems like a cross cutting concern
-		 * We probably want to check if a user is logged in on MANY different endpoints
-		 * In order for them to access that data
-		 * So we can create an aspect w/ a piece of advice inside of that aspect
-		 * That will control whether or not the user has access to that endpoint method
-		 */
-//		HttpSession session = request.getSession(false); // false because we don't want a new session
-//		// to be created if the session does not exist
-//		if (session == null) {
-//			return ResponseEntity.status(401).body(new MessageDTO("User is not logged in!"));
-//		} else {
-//			System.out.println(session.getAttribute("loggedInUser"));
-//		}
-		
 		try {
 			Review review = reviewService.getReviewByID(id);
 			return ResponseEntity.status(200).body(review);
@@ -79,11 +67,12 @@ public class ReviewController {
 		
 	}
 	
+	
 	@PostMapping(path = "review")
 	@LoggedInOnly
 	@UnbannedOnly
 	public ResponseEntity<Object> addReview(@RequestBody PostReviewDTO reviewDTO) {
-		
+		System.out.println("made it here to add review");
 		try {
 			System.out.println(reviewDTO);
 			Review review;
@@ -105,7 +94,11 @@ public class ReviewController {
 		try {
 			ArrayList<Review> reviewList = null;
 			reviewList = reviewService.getReviewsByGame(gameID);
-			return ResponseEntity.status(200).body(reviewList);
+			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+			for(int i=0; i<reviewList.size(); i++) {
+				dispReviewList.add(new DisplayReview(reviewList.get(i)));
+			}
+			return ResponseEntity.status(200).body(dispReviewList);
 		} catch (ReviewNotFoundException e) {
 			return ResponseEntity.status(404).body(new MessageDTO("No Reviews could be found"));
 		} catch (BadParameterException e) {
@@ -120,7 +113,11 @@ public class ReviewController {
 		try {
 			ArrayList<Review> reviewList = null;
 			reviewList = (ArrayList<Review>) reviewService.getReviewsByUser(username);
-			return ResponseEntity.status(200).body(reviewList);
+			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+			for(int i=0; i<reviewList.size(); i++) {
+				dispReviewList.add(new DisplayReview(reviewList.get(i)));
+			}
+			return ResponseEntity.status(200).body(dispReviewList);
 		} catch (ReviewNotFoundException e) {
 			return ResponseEntity.status(404).body(new MessageDTO("No Reviews could be found"));
 		} catch (EmptyParameterException e) {
@@ -130,8 +127,44 @@ public class ReviewController {
 		}
 	}
 	
-	@GetMapping(path = "recent")
+	@GetMapping(path = "review/all")
+	@LoggedInOnly
+	@ModeratorOnly
+	public ResponseEntity<Object> getAllReviews(){
+		try {
+			ArrayList<Review> reviewList = null;
+			reviewList = (ArrayList<Review>) reviewService.getAllReviews();
+			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+			for(int i=0; i<reviewList.size(); i++) {
+				if(reviewList.get(i) != null) {
+					dispReviewList.add(new DisplayReview(reviewList.get(i)));
+				} else {
+					dispReviewList.add(null);
+				}
+			}
+			return ResponseEntity.status(200).body(dispReviewList);
+		}catch (ReviewNotFoundException e) {
+			return ResponseEntity.status(404).body(new MessageDTO("No Reviews could be found"));
+		}
+		
+	}
+	
+	@GetMapping(path = "review/recent")
 	public ResponseEntity<Object> getTenMostRecentReviews() {
-		return null;
+		try {
+			ArrayList<Review> reviewList = null;
+			reviewList = (ArrayList<Review>) reviewService.getAllReviews();
+			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+			for(int i=0; i<10; i++) {
+				if(reviewList.get(i) != null) {
+					dispReviewList.add(new DisplayReview(reviewList.get(i)));
+				} else {
+					dispReviewList.add(null);
+				}
+			}
+			return ResponseEntity.status(200).body(dispReviewList);
+		}catch (ReviewNotFoundException e) {
+			return ResponseEntity.status(404).body(new MessageDTO("No Reviews could be found"));
+		}
 	}
 }
