@@ -50,8 +50,6 @@ public class ExternalRequestController {
 		String imageID;
 		for(int i=0; i<response.getBody().size(); i++) {
 			gameSearchList.add(new Game());
-			System.out.println("i:" + i);
-			System.out.println("response: " + response.getBody().get(i).toString());
 			gameSearchList.get(i).setGameID(Integer.parseInt(response.getBody().get(i).get("id").toString()));
 			gameSearchList.get(i).setGameName(response.getBody().get(i).get("name").toString().replace("\"", ""));
 			if(response.getBody().get(i).get("cover") != null) {

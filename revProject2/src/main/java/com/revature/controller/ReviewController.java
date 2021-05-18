@@ -59,12 +59,9 @@ public class ReviewController {
 
 	
 	
-	
-	
 	@GetMapping(path = "review/{id}")
 	@LoggedInOnly
 	public ResponseEntity<Object> getReviewById(@PathVariable("id") String id) {
-		
 		try {
 			Review review = reviewService.getReviewByID(id);
 			RestTemplate template = new RestTemplate();
@@ -88,7 +85,6 @@ public class ReviewController {
 		} catch (EmptyParameterException e) {
 			return ResponseEntity.status(400).body(new MessageDTO("User provided an empty parameter"));
 		}
-		
 	}
 	
 	
@@ -109,7 +105,6 @@ public class ReviewController {
 		} catch (BadParameterException e) {
 			return ResponseEntity.status(400).body(new MessageDTO("User provided a bad parameter"));
 		}
-		
 	}
 	
 	@GetMapping(path = "review/game/{id}")
@@ -337,7 +332,7 @@ public class ReviewController {
 					}
 					dispReviewList.get(i).setGameName(response.getBody().get(checkIndex).get("name").toString().replace("\"", ""));
 				} else {
-					//If it's null, that means we couldn't fill up with 10 reviews for some reason so just cap it here
+					//If it's null, that means we couldn't fill up with 10 reviews for some reason (most likely reason is that while in testing, we're handing less than 10) so just cap it here
 					i = 10;
 				}
 			}
