@@ -217,6 +217,7 @@ public class ReviewController {
 	
 	
 	@GetMapping(path = "review/all")
+	@ModeratorOnly
 	public ResponseEntity<Object> getAllReviews(){
 		try {
 			ArrayList<Review> reviewList = null;
