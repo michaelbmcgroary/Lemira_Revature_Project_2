@@ -93,8 +93,11 @@ public class LoginController {
 	}
 	
 	@PostMapping(path="logout")
-	public @ResponseBody ResponseEntity<Void> logout() {
-		HttpSession session = request.getSession(true);
+	public @ResponseBody ResponseEntity<Object> logout() {
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			return ResponseEntity.status(400).body(new MessageDTO("User is not logged in"));
+		}
 		logger.info("User, " + ((User) session.getAttribute("currentlyLoggedInUser")).getUsername()+ " has logged out");
 		session.invalidate();
 		return ResponseEntity.status(200).build();

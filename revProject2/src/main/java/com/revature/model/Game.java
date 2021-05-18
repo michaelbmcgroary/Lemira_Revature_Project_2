@@ -1,4 +1,4 @@
-package com.revature.dto;
+package com.revature.model;
 
 import com.revature.model.Review;
 import com.revature.model.ReviewStatus;
@@ -12,28 +12,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString @EqualsAndHashCode
-public class DisplayReview {
+public class Game {
 	
-	private String username;
-	private int rating;
-	private String description;
-	private double hoursPlayed;
-	private String completionStatus;
 	private int gameID;
 	private String gameName;
 	private String thumbnailURL;
 	private String coverURL;
 	private int coverHeight;
 	private int coverWidth;
-	
-	public DisplayReview(Review review) {
-		this.username = review.getUser().getUsername();
-		this.rating = review.getRating();
-		this.description = review.getDescription();
-		this.hoursPlayed = review.getHoursPlayed();
-		this.completionStatus = review.getCompletionStatus().getStatus();
-		this.gameID = review.getGameID();
-	}
 	
 	public void setThumbnailURL(String imageID) {
 		this.thumbnailURL = "https://images.igdb.com/igdb/image/upload/t_thumb/" + imageID + ".jpg";
