@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -47,8 +48,10 @@ public class ExternalRequestController {
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
 				     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
-			ResponseEntity<JsonNode> response = template.exchange(request, JsonNode.class);
-			if(response.getStatusCodeValue() != 200) {
+			ResponseEntity<JsonNode> response;
+			try {
+				response = template.exchange(request, JsonNode.class);
+			} catch (HttpClientErrorException e) {
 				throw new ExternalAPIConnectException();
 			}
 			String imageID;
