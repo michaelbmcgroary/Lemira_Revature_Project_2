@@ -222,52 +222,63 @@ public class ReviewController {
 			reviewList = (ArrayList<Review>) reviewService.getAllReviews();
 			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
 			//ArrayList<Integer> gameIDList = new ArrayList<Integer>();
-			String bodyString = "";
-			for(int i=0, j=reviewList.size()-1; i<10 && j>=0; i++, j--) {
-				
-				if(reviewList.get(j) != null) {
-					if(i==0) {
-						bodyString += "where id = " + reviewList.get(j).getGameID();
+			ArrayList<String> bodyStrings = new ArrayList<String>();
+			int numStrings = -1;
+			//starting at negative 1 since it will increase immediately
+			for(int i=0; i<reviewList.size(); i++) {
+				if(i%10 == 0) {
+					numStrings++;
+					bodyStrings.add("");
+				}
+				if(reviewList.get(i) != null) {
+					if(i%10 == 0) {
+						bodyStrings.set(numStrings, bodyStrings.get(numStrings) + "where id = " + reviewList.get(i).getGameID());
 					} else {
-						bodyString += " | id = " + reviewList.get(j).getGameID();
+						bodyStrings.set(numStrings, bodyStrings.get(numStrings) + "| id = " + reviewList.get(i).getGameID());
 					}
-					dispReviewList.add(new DisplayReview(reviewList.get(j)));
+					dispReviewList.add(new DisplayReview(reviewList.get(i)));
 				} else {
 					//null values can indicate a potentially deleted review, so keep going until we get 10
 					//decrements i because it's about to increment it
 					i--;
 				}
 			}
-			RestTemplate template = new RestTemplate();
-			RequestEntity<String> request = RequestEntity
-				     .post("https://api.igdb.com/v4/games")
-				     .accept(MediaType.APPLICATION_JSON)
-				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
-				     .body(bodyString + "; fields name, cover.image_id, cover.height, cover.width;");
-			ResponseEntity<JsonNode> response = template.exchange(request, JsonNode.class);
-			String imageID;
-			int checkIndex;
-			for(int i=0; i<dispReviewList.size(); i++) {
-				checkIndex = i;
-				if(response.getBody().get(i) == null || dispReviewList.get(i).getGameID() != Integer.parseInt(response.getBody().get(i).get("id").toString())) {
-					for(int j=response.getBody().size()-1; j>=0; j--) {
-						if(dispReviewList.get(i).getGameID() == Integer.parseInt(response.getBody().get(j).get("id").toString())) {
-							checkIndex = j;
-							j = -1;
+			ArrayList<ResponseEntity<JsonNode>> responseList = new ArrayList<ResponseEntity<JsonNode>>();
+			for(int m=0; m<=numStrings; m++) {
+				RestTemplate template = new RestTemplate();
+				RequestEntity<String> request = RequestEntity
+					     .post("https://api.igdb.com/v4/games")
+					     .accept(MediaType.APPLICATION_JSON)
+					     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
+					     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+					     .body(bodyStrings.get(m) + "; fields name, cover.image_id, cover.height, cover.width;");
+				ResponseEntity<JsonNode> response = template.exchange(request, JsonNode.class);
+				responseList.add(response);
+				//The external API has a 10 ID limit when querying, so the responses have to be grouped by 10 and checked for duplicate games among those 10 entries
+				String imageID;
+				int checkIndex;
+				for(int i=(m*10), k=0; i<dispReviewList.size() && k<10; i++, k++) {
+					checkIndex = i%10;
+					System.out.println("checkIndex: " + checkIndex);
+					if(responseList.get(m).getBody().get(checkIndex) == null || dispReviewList.get(i).getGameID() != Integer.parseInt(responseList.get(m).getBody().get(checkIndex).get("id").toString())) {
+						for(int j=responseList.get(m).getBody().size()-1; j>=0; j--) {
+							if(dispReviewList.get(i).getGameID() == Integer.parseInt(responseList.get(m).getBody().get(j).get("id").toString())) {
+								checkIndex = j;
+								j = -1;
+							}
 						}
 					}
+					if(responseList.get(m).getBody().get(checkIndex).get("cover") != null) {
+						imageID = responseList.get(m).getBody().get(checkIndex).get("cover").get("image_id").toString().replace("\"", "");
+						dispReviewList.get(i).setThumbnailURL(imageID);
+						dispReviewList.get(i).setCoverURL(imageID);
+						dispReviewList.get(i).setCoverHeight(Integer.parseInt(responseList.get(m).getBody().get(checkIndex).get("cover").get("height").toString()));
+						dispReviewList.get(i).setCoverWidth(Integer.parseInt(responseList.get(m).getBody().get(checkIndex).get("cover").get("width").toString()));
+					} else {
+						dispReviewList.get(i).setNoArt();
+					}
+					dispReviewList.get(i).setGameName(responseList.get(m).getBody().get(checkIndex).get("name").toString().replace("\"", ""));
 				}
-				if(response.getBody().get(checkIndex).get("cover") != null) {
-					imageID = response.getBody().get(checkIndex).get("cover").get("image_id").toString().replace("\"", "");
-					dispReviewList.get(i).setThumbnailURL(imageID);
-					dispReviewList.get(i).setCoverURL(imageID);
-					dispReviewList.get(i).setCoverHeight(Integer.parseInt(response.getBody().get(checkIndex).get("cover").get("height").toString()));
-					dispReviewList.get(i).setCoverWidth(Integer.parseInt(response.getBody().get(checkIndex).get("cover").get("width").toString()));
-				} else {
-					dispReviewList.get(i).setNoArt();
-				}
-				dispReviewList.get(i).setGameName(response.getBody().get(checkIndex).get("name").toString().replace("\"", ""));
 			}
 			return ResponseEntity.status(200).body(dispReviewList);
 		}catch (ReviewNotFoundException e) {
