@@ -70,6 +70,7 @@ public class ReviewController {
 				     .accept(MediaType.APPLICATION_JSON)
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header("User-Agent", "My own REST client")
 				     .body("where id = " + review.getGameID() + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
 			try {
@@ -120,6 +121,7 @@ public class ReviewController {
 				     .accept(MediaType.APPLICATION_JSON)
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header("User-Agent", "My own REST client")
 				     .body("where id = " + gameID + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
 			try {
@@ -194,6 +196,7 @@ public class ReviewController {
 					     .accept(MediaType.APPLICATION_JSON)
 					     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 					     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+					     .header("User-Agent", "My own REST client")
 					     .body(bodyStrings.get(m) + "; fields name, cover.image_id, cover.height, cover.width;");
 				ResponseEntity<JsonNode> response;
 				try {
@@ -281,6 +284,7 @@ public class ReviewController {
 					     .accept(MediaType.APPLICATION_JSON)
 					     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 					     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+					     .header("User-Agent", "My own REST client")
 					     .body(bodyStrings.get(m) + "; fields name, cover.image_id, cover.height, cover.width;");
 				ResponseEntity<JsonNode> response;
 				try {
@@ -354,6 +358,7 @@ public class ReviewController {
 				     .accept(MediaType.APPLICATION_JSON)
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header("User-Agent", "My own REST client")
 				     .body(bodyString + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
 			try {
