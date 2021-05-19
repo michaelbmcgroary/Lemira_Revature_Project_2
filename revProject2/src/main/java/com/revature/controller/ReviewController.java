@@ -110,7 +110,6 @@ public class ReviewController {
 	@GetMapping(path = "review/game/{id}")
 	public ResponseEntity<Object> getReviewsByGame(@PathVariable("id") String gameID){
 		try {
-			
 			RestTemplate template = new RestTemplate();
 			RequestEntity<String> request = RequestEntity
 				     .post("https://api.igdb.com/v4/games")
@@ -217,7 +216,6 @@ public class ReviewController {
 	
 	
 	@GetMapping(path = "review/all")
-	@ModeratorOnly
 	public ResponseEntity<Object> getAllReviews(){
 		try {
 			ArrayList<Review> reviewList = null;
