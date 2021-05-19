@@ -1,8 +1,6 @@
 package com.revature.dto;
 
 import com.revature.model.Review;
-import com.revature.model.ReviewStatus;
-import com.revature.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -49,5 +47,11 @@ public class DisplayReview {
 		this.coverURL = "https://cdn.discordapp.com/attachments/506514654764466197/844277972261011456/gameNotFoundCover.jpg";
 		this.coverHeight = 352;
 		this.coverWidth = 264;
+	}
+	
+	public void setNoConnection() {
+		setNoArt();
+		this.gameName = "IGDB Connection Unstable";
+		
 	}
 }

@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.revature.dto.MessageDTO;
+import com.revature.exception.ExternalAPIConnectException;
 import com.revature.model.Game;
 
 @CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:4200")
@@ -37,36 +38,44 @@ public class ExternalRequestController {
 	
 	@GetMapping(path = "game/search/{name}")
 	public ResponseEntity<Object> searchForGames(@PathVariable("name") String name) {
-		
 		ArrayList<Game> gameSearchList = new ArrayList<Game>();
-		RestTemplate template = new RestTemplate();
-		RequestEntity<String> request = RequestEntity
-			     .post("https://api.igdb.com/v4/games")
-			     .accept(MediaType.APPLICATION_JSON)
-			     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-			     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
-			     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
-		ResponseEntity<JsonNode> response = template.exchange(request, JsonNode.class);
-		String imageID;
-		for(int i=0; i<response.getBody().size(); i++) {
-			gameSearchList.add(new Game());
-			gameSearchList.get(i).setGameID(Integer.parseInt(response.getBody().get(i).get("id").toString()));
-			gameSearchList.get(i).setGameName(response.getBody().get(i).get("name").toString().replace("\"", ""));
-			if(response.getBody().get(i).get("cover") != null) {
-				imageID = response.getBody().get(i).get("cover").get("image_id").toString().replace("\"", "");
-				gameSearchList.get(i).setThumbnailURL(imageID);
-				gameSearchList.get(i).setCoverURL(imageID);
-				gameSearchList.get(i).setCoverHeight(Integer.parseInt(response.getBody().get(i).get("cover").get("height").toString()));
-				gameSearchList.get(i).setCoverWidth(Integer.parseInt(response.getBody().get(i).get("cover").get("width").toString()));
-			} else {
-				gameSearchList.get(i).setNoArt();
+		try {
+			RestTemplate template = new RestTemplate();
+			RequestEntity<String> request = RequestEntity
+				     .post("https://api.igdb.com/v4/games")
+				     .accept(MediaType.APPLICATION_JSON)
+				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
+				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
+			ResponseEntity<JsonNode> response = template.exchange(request, JsonNode.class);
+			if(response.getStatusCodeValue() != 200) {
+				throw new ExternalAPIConnectException();
 			}
-		}
-		
-		if(gameSearchList.size() > 0) {
-			return ResponseEntity.status(200).body(gameSearchList);
-		} else {
-			return ResponseEntity.status(404).body(new MessageDTO("No results for search"));
+			String imageID;
+			for(int i=0; i<response.getBody().size(); i++) {
+				gameSearchList.add(new Game());
+				gameSearchList.get(i).setGameID(Integer.parseInt(response.getBody().get(i).get("id").toString()));
+				gameSearchList.get(i).setGameName(response.getBody().get(i).get("name").toString().replace("\"", ""));
+				if(response.getBody().get(i).get("cover") != null) {
+					imageID = response.getBody().get(i).get("cover").get("image_id").toString().replace("\"", "");
+					gameSearchList.get(i).setThumbnailURL(imageID);
+					gameSearchList.get(i).setCoverURL(imageID);
+					gameSearchList.get(i).setCoverHeight(Integer.parseInt(response.getBody().get(i).get("cover").get("height").toString()));
+					gameSearchList.get(i).setCoverWidth(Integer.parseInt(response.getBody().get(i).get("cover").get("width").toString()));
+				} else {
+					gameSearchList.get(i).setNoArt();
+				}
+			}
+			
+			if(gameSearchList.size() > 0) {
+				return ResponseEntity.status(200).body(gameSearchList);
+			} else {
+				return ResponseEntity.status(404).body(new MessageDTO("No results for search"));
+			}
+		} catch (ExternalAPIConnectException e) {
+			gameSearchList.add(new Game());
+			gameSearchList.get(0).setNoConnection();
+			return ResponseEntity.status(403).body(gameSearchList);
 		}
 		
 		

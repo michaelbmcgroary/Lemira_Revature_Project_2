@@ -29,9 +29,9 @@ import com.revature.exception.UserAddException;
 import com.revature.model.User;
 import com.revature.service.LoginService;
 
-//@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:4200")
+@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:4200")
 //@CrossOrigin(allowCredentials = "true", origins = "*")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*", allowCredentials = "true")
 @Controller
 public class LoginController {
 
@@ -67,7 +67,6 @@ public class LoginController {
 			}
 			HttpSession session = request.getSession(true);
 			session.setAttribute("currentlyLoggedInUser", user);
-			System.out.println(user);
 			return ResponseEntity.status(200).body(user);
 		} catch(LoginException e) {
 			logger.error("The user could not be found and therefore could not be logged in");
@@ -84,7 +83,6 @@ public class LoginController {
 		User user = null;
 		HttpSession session = request.getSession(true);
 		user = (User) session.getAttribute("currentlyLoggedInUser");
-		System.out.println(user);
 		if(user == null) {
 			MessageDTO messageDTO = new MessageDTO();
 			messageDTO.setMessage("User is not currently logged in");
@@ -117,7 +115,6 @@ public class LoginController {
 			return ResponseEntity.status(400).body(e.getMessage());
 		}
 		if(user == null) {
-			System.out.println("user is null");
 			MessageDTO messageDTO = new MessageDTO();
 			messageDTO.setMessage("User could not be logged in");
 			return ResponseEntity.status(400).body(messageDTO);

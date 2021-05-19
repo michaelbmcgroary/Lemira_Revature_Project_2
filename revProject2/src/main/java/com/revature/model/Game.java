@@ -36,4 +36,10 @@ public class Game {
 		this.coverHeight = 352;
 		this.coverWidth = 264;
 	}
+	
+	public void setNoConnection() {
+		gameID = 0;
+		gameName = "IGDB Connection Unstable";
+		setNoArt();
+	}
 }
