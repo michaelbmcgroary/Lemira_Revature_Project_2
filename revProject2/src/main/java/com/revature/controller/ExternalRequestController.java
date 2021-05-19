@@ -43,8 +43,8 @@ public class ExternalRequestController {
 		try {
 			RestTemplate template = new RestTemplate();
 			RequestEntity<String> request = RequestEntity
-				     .post("http://ec2-3-140-201-86.us-east-2.compute.amazonaws.com:8081/https://api.igdb.com/v4/games")
-				     .accept(MediaType.APPLICATION_JSON)
+				     .post("https://api.igdb.com/v4/games")
+				     .accept(MediaType.TEXT_PLAIN)
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
 				     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
