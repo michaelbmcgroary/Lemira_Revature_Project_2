@@ -47,6 +47,7 @@ public class ExternalRequestController {
 				     .accept(MediaType.TEXT_PLAIN)
 				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
 				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header("User-Agent", "My own REST client")
 				     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
 			try {
