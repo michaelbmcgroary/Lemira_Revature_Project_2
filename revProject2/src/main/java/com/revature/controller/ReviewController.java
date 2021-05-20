@@ -41,7 +41,7 @@ import com.revature.service.ReviewService;
 //@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 //@CrossOrigin(origins = "*")
-@CrossOrigin(allowCredentials = "true")
+@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
 @Controller // This is a stereotype annotation, just like @Component, @Service, @Repository
 // What those annotations are for, is to have Spring register it as a Spring Bean
 public class ReviewController {
