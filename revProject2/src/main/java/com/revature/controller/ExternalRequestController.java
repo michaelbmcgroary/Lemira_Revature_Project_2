@@ -27,7 +27,7 @@ import com.revature.model.Game;
 
 //@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://localhost:4200", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
 //@CrossOrigin(allowCredentials = "true")
-@CrossOrigin(origins = "*")
+@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
 @Controller
 public class ExternalRequestController {
 	
