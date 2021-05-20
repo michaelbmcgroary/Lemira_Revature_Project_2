@@ -38,7 +38,7 @@ import com.revature.service.ReviewService;
 
 
 //@CrossOrigin(allowCredentials = "true", origins = "*", allowedHeaders = "*")
-@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:4200")
+@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 //@CrossOrigin(origins = "*")
 @Controller // This is a stereotype annotation, just like @Component, @Service, @Repository
