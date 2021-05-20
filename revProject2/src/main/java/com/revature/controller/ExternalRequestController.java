@@ -25,7 +25,8 @@ import com.revature.dto.MessageDTO;
 import com.revature.exception.ExternalAPIConnectException;
 import com.revature.model.Game;
 
-@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
+//@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
+@CrossOrigin(allowCredentials = "true")
 @Controller
 public class ExternalRequestController {
 	

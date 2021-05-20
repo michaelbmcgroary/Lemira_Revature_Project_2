@@ -29,9 +29,10 @@ import com.revature.exception.UserAddException;
 import com.revature.model.User;
 import com.revature.service.LoginService;
 
-@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
+//@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
 //@CrossOrigin(allowCredentials = "true", origins = "*")
 //@CrossOrigin(origins = "*", allowCredentials = "true")
+@CrossOrigin(allowCredentials = "true")
 @Controller
 public class LoginController {
 
