@@ -33,7 +33,7 @@ import com.revature.service.LoginService;
 //@CrossOrigin(allowCredentials = "true", origins = "*")
 //@CrossOrigin(origins = "*", allowCredentials = "true")
 //@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://localhost:4200", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Controller
 public class LoginController {
 
