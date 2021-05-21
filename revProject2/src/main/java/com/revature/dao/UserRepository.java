@@ -8,8 +8,6 @@ import javax.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,9 +24,6 @@ public class UserRepository {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	@Autowired
-	private Logger logger;
 	
 	//add in fake data for now and replace with SQL later
 	List<User> users = new ArrayList<User>();

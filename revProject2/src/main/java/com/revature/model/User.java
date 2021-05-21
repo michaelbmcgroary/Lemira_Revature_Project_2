@@ -3,7 +3,6 @@ package com.revature.model;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

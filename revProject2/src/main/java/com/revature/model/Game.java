@@ -1,9 +1,5 @@
 package com.revature.model;
 
-import com.revature.model.Review;
-import com.revature.model.ReviewStatus;
-import com.revature.model.User;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

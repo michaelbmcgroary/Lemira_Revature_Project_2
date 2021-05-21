@@ -1,9 +1,7 @@
 package com.revature.aspect;
 
-import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -24,8 +22,6 @@ public class AuthorizationAspect {
 
 	@Autowired
 	private HttpServletRequest request;
-	@Autowired
-	private HttpServletResponse response;
 	
 	@Around("@annotation(com.revature.annotations.LoggedInOnly)")
 	public ResponseEntity<Object> protectEndpointForLoggedInUsersOnly(ProceedingJoinPoint pjp) throws Throwable {

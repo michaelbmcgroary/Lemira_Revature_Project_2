@@ -3,7 +3,6 @@ package com.revature.controller;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -22,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.revature.annotations.LoggedInOnly;
-import com.revature.annotations.ModeratorOnly;
 import com.revature.annotations.UnbannedOnly;
 import com.revature.dto.DisplayReview;
 import com.revature.dto.MessageDTO;
@@ -32,7 +30,6 @@ import com.revature.exception.EmptyParameterException;
 import com.revature.exception.ExternalAPIConnectException;
 import com.revature.exception.ReviewAddException;
 import com.revature.exception.ReviewNotFoundException;
-import com.revature.exception.UserNotFoundException;
 import com.revature.model.Review;
 import com.revature.model.User;
 import com.revature.service.ReviewService;

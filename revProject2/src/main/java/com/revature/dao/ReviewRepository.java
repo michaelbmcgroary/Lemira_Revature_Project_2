@@ -5,24 +5,13 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.dto.LoginDTO;
-import com.revature.exception.BadPasswordException;
 import com.revature.exception.DatabaseException;
-import com.revature.exception.NotModeratorException;
-import com.revature.exception.PasswordHashException;
-import com.revature.exception.UserNotFoundException;
 import com.revature.model.Review;
-import com.revature.model.ReviewStatus;
-import com.revature.model.User;
-
 
 @Repository
 @Transactional
@@ -30,8 +19,7 @@ public class ReviewRepository {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	private Logger logger = LoggerFactory.getLogger(ReviewRepository.class);
+
 	private UserRepository userRepository;
 	
 	public ReviewRepository(UserRepository userRepository) throws DatabaseException {

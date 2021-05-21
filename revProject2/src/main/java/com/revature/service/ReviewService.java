@@ -1,6 +1,5 @@
 package com.revature.service;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,20 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.revature.annotations.LoggedInOnly;
 import com.revature.dao.ReviewRepository;
 import com.revature.dao.UserRepository;
-import com.revature.dto.LoginDTO;
 import com.revature.dto.PostReviewDTO;
 import com.revature.exception.BadParameterException;
-import com.revature.exception.BadPasswordException;
 import com.revature.exception.DatabaseException;
 import com.revature.exception.EmptyParameterException;
-import com.revature.exception.NotModeratorException;
-import com.revature.exception.PasswordHashException;
 import com.revature.exception.ReviewAddException;
 import com.revature.exception.ReviewNotFoundException;
-import com.revature.exception.UserNotFoundException;
 import com.revature.model.Review;
 
 @Service
@@ -31,6 +24,7 @@ public class ReviewService {
 	@Autowired
 	private ReviewRepository reviewRepo;
 	
+	@SuppressWarnings("unused")
 	@Autowired
 	private UserRepository userRepo;
 	

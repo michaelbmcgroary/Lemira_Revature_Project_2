@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revature.dao.ReviewRepository;
 import com.revature.dao.UserRepository;
-import com.revature.dto.LoginDTO;
 import com.revature.dto.PostReviewDTO;
 import com.revature.exception.*;
 import com.revature.model.Review;
@@ -44,8 +43,6 @@ class ReviewServiceUnitTest {
 		mockUserRepository = mock(UserRepository.class);
 		mockReviewRepo = mock(ReviewRepository.class);
 
-		LoginDTO login = new LoginDTO("Username", "Password");
-		LoginDTO login2 = new LoginDTO("Username2", "Password");
 		User poster = new User(1, "Username", "Password", "First", "Last", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
 		PostReviewDTO reviewDTO = new PostReviewDTO(poster, 10, "Test", 12.5, new ReviewStatus(3), 515);
 		Review sendReview = new Review(reviewDTO);
