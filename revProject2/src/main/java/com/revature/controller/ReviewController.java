@@ -242,8 +242,6 @@ public class ReviewController {
 			return ResponseEntity.status(404).body(new MessageDTO("No Reviews could be found"));
 		} catch (EmptyParameterException e) {
 			return ResponseEntity.status(400).body(new MessageDTO("Username was left blank"));
-		} catch (UserNotFoundException e) {
-			return ResponseEntity.status(404).body(new MessageDTO("User was not found"));
 		} catch (ExternalAPIConnectException e) {
 			for(int i=0; i<dispReviewList.size(); i++) {
 				dispReviewList.get(i).setNoConnection();

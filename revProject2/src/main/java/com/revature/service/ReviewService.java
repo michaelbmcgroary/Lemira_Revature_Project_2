@@ -84,7 +84,7 @@ public class ReviewService {
 	
 
 	
-	public List<Review> getReviewsByUser(String username) throws ReviewNotFoundException, EmptyParameterException, UserNotFoundException{
+	public List<Review> getReviewsByUser(String username) throws ReviewNotFoundException, EmptyParameterException{
 		List<Review> reviewList = null;
 		try {
 			if(username.trim().equals("")) {

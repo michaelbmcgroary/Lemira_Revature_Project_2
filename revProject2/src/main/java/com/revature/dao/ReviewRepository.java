@@ -81,7 +81,7 @@ public class ReviewRepository {
 		} catch (javax.persistence.NoResultException e) {
 			throw new DatabaseException();
 		} catch (org.hibernate.ObjectNotFoundException e) {
-			System.out.println(e.getEntityName());
+			throw new DatabaseException();
 		}
 		
 		return reviewList;
@@ -97,6 +97,8 @@ public class ReviewRepository {
 			reviewList = session.createQuery("from Review WHERE userID = " + userID, Review.class).getResultList();
 		} catch (DatabaseException e) {
 			throw new DatabaseException(e.getMessage());
+		} catch (javax.persistence.NoResultException e) {
+			throw new DatabaseException("No Reviews exist for this user");
 		}
 		
 		return reviewList;

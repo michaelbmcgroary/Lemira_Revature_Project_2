@@ -3,46 +3,30 @@ package com.revature.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.eq;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.dao.ReviewRepository;
 import com.revature.dao.UserRepository;
 import com.revature.dto.LoginDTO;
 import com.revature.dto.PostReviewDTO;
-import com.revature.dto.PostUserDTO;
 import com.revature.exception.*;
 import com.revature.model.Review;
 import com.revature.model.ReviewStatus;
 import com.revature.model.User;
 import com.revature.model.UserStatus;
 import com.revature.model.UserType;
-import com.revature.service.LoginService;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceUnitTest {
@@ -71,33 +55,17 @@ class ReviewServiceUnitTest {
 		reviewList.add(retReview);
 
 		when(mockReviewRepo.newReview(sendReview)).thenReturn(retReview);
-		
-		when(mockReviewRepo.newReview(retReview))
-				.thenThrow(new DatabaseException("Bad Review"));
-
+		when(mockReviewRepo.newReview(retReview)).thenThrow(new DatabaseException("Bad Review"));
 		when(mockReviewRepo.getReviewByID(1)).thenReturn(retReview);
+		when(mockReviewRepo.getReviewByID(2)).thenThrow(new DatabaseException());
+		when(mockReviewRepo.getAllReviews()).thenReturn(reviewList);
+		//when(mockReviewRepo.getAllReviews()).thenThrow(new DatabaseException());
+		when(mockReviewRepo.getReviewsByUser("Username")).thenReturn(reviewList);
+		when(mockReviewRepo.getReviewsByUser("Username2")).thenThrow(new DatabaseException(""));
+		when(mockReviewRepo.getReviewsByGame(1)).thenReturn(reviewList);
+		when(mockReviewRepo.getReviewsByGame(2)).thenThrow(new DatabaseException());
+		
 
-		when(mockReviewRepo.getReviewByID(2))
-				.thenThrow(new DatabaseException());
-/*
-		when(mockReviewRepo.getReviewByID(login, 2)).thenThrow(new NotFinanceManagerException());
-
-		when(mockReviewRepo.getAllRequests(login)).thenReturn(reviewList);
-
-		when(mockReviewRepo.getAllRequestsFilterByStatus(login, new ReviewStatus(1))).thenReturn(reviewList);
-
-		when(mockReviewRepo.getAllRequestsFilterByStatus(login, new ReviewStatus(3))).thenReturn(reviewList);
-
-		when(mockReviewRepo.getPreviousRequestsByEmployee(login)).thenReturn(reviewList);
-
-		when(mockReviewRepo.approveReviewRequest(login, retReview)).thenReturn(goodReturnApproved);
-
-		when(mockReviewRepo.approveReviewRequest(login2, retReview)).thenReturn(goodReturnDenied);
-
-		when(mockReviewRepo.getRecieptByID(eq(login), eq(1))).thenReturn(blob);
-
-		when(mockReviewRepo.getRecieptByID(eq(login), eq(0))).thenThrow(new NoRecieptException());
-*/
 	}
 
 	@BeforeEach
@@ -105,6 +73,8 @@ class ReviewServiceUnitTest {
 		reviewService = new ReviewService(mockUserRepository, mockReviewRepo);
 	}
 
+	
+	
 	@Test
 	public void test_postNewReview_NoIssue() throws PasswordHashException, ReviewAddException, BadParameterException  {
 		User poster = new User(1, "Username", "Password", "First", "Last", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
@@ -123,7 +93,9 @@ class ReviewServiceUnitTest {
 		}
 	}
 
-/*	
+//---
+
+	
 	@Test
 	public void test_getReviewByID_NoIssue() throws PasswordHashException, ReviewNotFoundException, BadParameterException, EmptyParameterException {
 		String id = "1";
@@ -162,7 +134,8 @@ class ReviewServiceUnitTest {
 			assertEquals(e.getMessage(), "The review with id 2 could not be found");
 		}
 	}
-
+	
+//---
 	
 	@Test
 	public void test_getAllReviews_NoIssue() throws PasswordHashException, ReviewNotFoundException {
@@ -176,57 +149,24 @@ class ReviewServiceUnitTest {
 		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getAllReviews();
 		assertEquals(expected, actual);
 	}
-
+	
+	/*
 	@Test
-	public void test_getReviewsByStatus_NoIssue() {
-
-		User poster = new User(1, "Username", "Password", "First", "Last", "email", new UserRole(2));
-		Review review1 = new Review(1, 100.00, "Test", null, poster, null, new ReviewStatus(3), new ReviewType(1), null,
-				null);
-		PostReviewDTO reviewDTO = new PostReviewDTO("100", "Test", 1, null);
-		Review review2 = new Review(reviewDTO);
-		review2.setAmount(100.00);
-		ArrayList<Review> expected = new ArrayList<Review>();
-		expected.add(review1);
-		expected.add(review2);
-		LoginDTO login = new LoginDTO("Username", "Password");
-		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getReviewsByStatus(login, "Approved");
-		assertEquals(expected, actual);
-
-	}
-
-	@Test
-	public void test_getReviewsByStatus_BlankStatus() {
-
+	public void test_getAllReviews_noReviews() {
 		try {
-			LoginDTO login = new LoginDTO("Username", "Password");
-			reviewService.getReviewsByStatus(login, "");
-			fail("EmptyParameterException was not thrown");
-		} catch (EmptyParameterException e) {
-			assertEquals(e.getMessage(), "The status to filter by was left blank");
+			//I don't know how to get this test to pass
+			reviewService.getAllReviews();
+			fail("NoReviewException was not thrown");
+		} catch (ReviewNotFoundException e) {
+			assertEquals(e.getMessage(), "No Reviews could be found");
 		}
-
 	}
+	*/
 
+//---
+	
 	@Test
-	public void test_getReviewsByStatus_BadStatus() {
-
-		User poster = new User(1, "Username", "Password", "First", "Last", "email", new UserRole(2));
-		Review review1 = new Review(1, 100.00, "Test", null, poster, null, new ReviewStatus(3), new ReviewType(1), null,
-				null);
-		PostReviewDTO reviewDTO = new PostReviewDTO("100", "Test", 1, null);
-		Review review2 = new Review(reviewDTO);
-		review2.setAmount(100.00);
-		ArrayList<Review> expected = new ArrayList<Review>();
-		expected.add(review1);
-		expected.add(review2);
-		LoginDTO login = new LoginDTO("Username", "Password");
-		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getReviewsByStatus(login, "Pending");
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void test_getReviewsByUser_NoIssue() throws PasswordHashException {
+	public void test_getReviewsByUser_NoIssue() throws PasswordHashException, ReviewNotFoundException, EmptyParameterException, UserNotFoundException {
 		User poster = new User(1, "Username", "Password", "First", "Last", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
 		PostReviewDTO reviewDTO = new PostReviewDTO(poster, 10, "Test", 12.5, new ReviewStatus(3), 515);
 		Review sendReview = new Review(reviewDTO);
@@ -234,9 +174,75 @@ class ReviewServiceUnitTest {
 		ArrayList<Review> expected = new ArrayList<Review>();
 		expected.add(sendReview);
 		expected.add(retReview);
-		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getReviewsByUser();
+		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getReviewsByUser("Username");
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void test_getReviewsByUser_noReviews() throws EmptyParameterException, UserNotFoundException {
+		try {
+			reviewService.getReviewsByUser("Username2");
+			fail("NoReviewException was not thrown");
+		} catch (ReviewNotFoundException e) {
+			assertEquals(e.getMessage(), "No Reviews could be found");
+		}
+	}
+	
+	@Test
+	public void test_getReviewsByUser_blankUsername() throws UserNotFoundException, ReviewNotFoundException {
+		try {
+			reviewService.getReviewsByUser("   ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "The username of the user was left blank");
+		}
+	}
+	
+	
+//---
+	
+	@Test
+	public void test_getReviewsByGame_NoIssue() throws ReviewNotFoundException, BadParameterException, EmptyParameterException, PasswordHashException  {
+		User poster = new User(1, "Username", "Password", "First", "Last", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
+		PostReviewDTO reviewDTO = new PostReviewDTO(poster, 10, "Test", 12.5, new ReviewStatus(3), 515);
+		Review sendReview = new Review(reviewDTO);
+		Review retReview = new Review(poster, 10, "Test", 12.5, new ReviewStatus(3), 523);
+		ArrayList<Review> expected = new ArrayList<Review>();
+		expected.add(sendReview);
+		expected.add(retReview);
+		ArrayList<Review> actual = (ArrayList<Review>) reviewService.getReviewsByGame("1");
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void test_getReviewsByGame_emptyParameter() throws UserNotFoundException, BadParameterException, ReviewNotFoundException {
+		try {
+			reviewService.getReviewsByGame("  ");
+			fail("EmptyParameterException was not thrown");
+		} catch (EmptyParameterException e) {
+			assertEquals(e.getMessage(), "No id was provided for the game");
+		}
+	}
+	
+	@Test
+	public void test_getReviewsByGame_badParameter() throws ReviewNotFoundException, EmptyParameterException  {
+		try {
+			reviewService.getReviewsByGame("abc");
+			fail("BadParameterException was not thrown");
+		} catch (BadParameterException e) {
+			assertEquals(e.getMessage(), "Game ID must be a number value");
+		}
+	}
 
-*/	
+	@Test
+	public void test_getReviewsByGame_noReviews() throws EmptyParameterException, UserNotFoundException, BadParameterException {
+		try {
+			reviewService.getReviewsByGame("2");
+			fail("NoReviewException was not thrown");
+		} catch (ReviewNotFoundException e) {
+			assertEquals(e.getMessage(), "No Reviews could be found");
+		}
+	}
+
+
 }
