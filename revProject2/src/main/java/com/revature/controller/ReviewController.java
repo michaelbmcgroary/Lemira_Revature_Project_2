@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -37,29 +38,25 @@ import com.revature.model.User;
 import com.revature.service.ReviewService;
 
 
-//@CrossOrigin(allowCredentials = "true", origins = "*", allowedHeaders = "*")
-@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
-//@CrossOrigin(origins = "*", allowCredentials = "true")
-//@CrossOrigin(origins = "*")
-@Controller // This is a stereotype annotation, just like @Component, @Service, @Repository
-// What those annotations are for, is to have Spring register it as a Spring Bean
+@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:4200", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
+@Controller 
 public class ReviewController {
+	
+	@Autowired
+	private Logger logger;
 
 	@Autowired
 	private ReviewService reviewService;
 	
 	@Autowired
 	private HttpServletRequest request;
-	
-	@SuppressWarnings("unused")
-	@Autowired
-	private HttpServletResponse response;
 
 	
 	
 	@GetMapping(path = "review/{id}")
 	@LoggedInOnly
 	public ResponseEntity<Object> getReviewById(@PathVariable("id") String id) {
+		logger.info("User requested to see a single review with id: " + id);
 		DisplayReview dispReview = null; 
 		try {
 			Review review = reviewService.getReviewByID(id);
@@ -93,6 +90,7 @@ public class ReviewController {
 			dispReview.setNoConnection();
 			return ResponseEntity.status(403).body(dispReview);
 		}
+		
 	}
 	
 	
@@ -103,12 +101,18 @@ public class ReviewController {
 		try {
 			HttpSession session = request.getSession(true);
 			reviewDTO.setUser((User)session.getAttribute("currentlyLoggedInUser"));
+			logger.info("User " + reviewDTO.getUser().getUsername() + " posted a new review");
 			DisplayReview dispReview = new DisplayReview(reviewService.postNewReview(reviewDTO));
 			return ResponseEntity.status(201).body(dispReview);
 		} catch (ReviewAddException e) {
 			return ResponseEntity.status(500).body(new MessageDTO("Unable to create review in the database!"));
 		} catch (BadParameterException e) {
 			return ResponseEntity.status(400).body(new MessageDTO("User provided a bad parameter"));
+		} catch (Exception e) {
+			logger.error("An unknown error has occured on the front end\n" + e.getStackTrace().toString());
+			return ResponseEntity.status(500).body(new MessageDTO(e.getStackTrace().toString()));
+			//A strange error occured a few times at complete random while having friends test the site, but since it was in deployment, I couldn't see the console itself
+			//this is here to hopefully shed some light on the issue and fix it
 		}
 	}
 	
@@ -136,6 +140,7 @@ public class ReviewController {
 			ArrayList<Review> reviewList = null;
 			reviewList = reviewService.getReviewsByGame(gameID);
 			ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+			logger.info("User requests to see all the reviews of the game " + gameName);
 			for(int i=0; i<reviewList.size(); i++) {
 				dispReviewList.add(new DisplayReview(reviewList.get(i)));
 				dispReviewList.get(i).setCoverHeight(coverHeight);
@@ -154,6 +159,7 @@ public class ReviewController {
 		} catch (EmptyParameterException e) {
 			return ResponseEntity.status(400).body(new MessageDTO("ID provided was not in correct format"));
 		} catch (ExternalAPIConnectException e) {
+			logger.warn("User requested to see all the reviews of a certain game but no game was returned by the external API");
 			return ResponseEntity.status(403).body(new MessageDTO("IGDB connectivity is unstable, please try again later"));
 		}
 	}
@@ -161,9 +167,12 @@ public class ReviewController {
 	
 	
 	@GetMapping(path = "user/{username}")
+	@LoggedInOnly
 	public ResponseEntity<Object> getReviewsByUser(@PathVariable("username") String username){
 		ArrayList<Review> reviewList = null;
 		ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+		HttpSession session = request.getSession(true);
+		logger.info("User, " + session.getAttribute("currentlyLoggedInUser") + " requested to see all the reviews of the user " + username);
 		try {
 			reviewList = (ArrayList<Review>) reviewService.getReviewsByUser(username);
 			ArrayList<String> bodyStrings = new ArrayList<String>();
@@ -251,6 +260,7 @@ public class ReviewController {
 	@GetMapping(path = "review/all")
 	public ResponseEntity<Object> getAllReviews(){
 		ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
+		logger.info("User viewed all the reviews available");
 		try {
 			ArrayList<Review> reviewList = null;
 			reviewList = (ArrayList<Review>) reviewService.getAllReviews();
@@ -333,6 +343,7 @@ public class ReviewController {
 	
 	@GetMapping(path = "review/recent")
 	public ResponseEntity<Object> getTenMostRecentReviews() {
+		logger.info("User viewed the 10 most recent reviews");
 		ArrayList<DisplayReview> dispReviewList = new ArrayList<DisplayReview>();
 		try {
 			ArrayList<Review> reviewList = null;

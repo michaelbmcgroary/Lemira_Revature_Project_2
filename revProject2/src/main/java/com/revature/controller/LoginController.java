@@ -29,24 +29,18 @@ import com.revature.exception.UserAddException;
 import com.revature.model.User;
 import com.revature.service.LoginService;
 
-//@CrossOrigin( allowCredentials = "true" ,origins = "http://localhost:8080")
-//@CrossOrigin(allowCredentials = "true", origins = "*")
-//@CrossOrigin(origins = "*", allowCredentials = "true")
-//@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://localhost:4200", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
-@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:8080", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
+@CrossOrigin( allowCredentials = "true" ,origins = {"http://localhost:4200", "http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080"})
 @Controller
 public class LoginController {
 
-	private Logger logger = LoggerFactory.getLogger(LoginController.class);
+	@Autowired
+	private Logger logger;
 	
 	@Autowired
 	private LoginService loginService;
 	
 	@Autowired
 	private HttpServletRequest request;
-	
-	@Autowired
-	private HttpServletResponse response;
 	
 	public LoginController() throws DatabaseException {
 		this.loginService = new LoginService();
@@ -69,6 +63,7 @@ public class LoginController {
 			}
 			HttpSession session = request.getSession(true);
 			session.setAttribute("currentlyLoggedInUser", user);
+			logger.info("User, " + user.getUsername() + " has logged in");
 			return ResponseEntity.status(200).body(user);
 		} catch(LoginException e) {
 			logger.error("The user could not be found and therefore could not be logged in");
@@ -121,6 +116,7 @@ public class LoginController {
 			messageDTO.setMessage("User could not be logged in");
 			return ResponseEntity.status(400).body(messageDTO);
 		}
+		logger.info("User, " + user.getUsername() + " has created an account");
 		return ResponseEntity.status(200).body(user);
 	};
 	

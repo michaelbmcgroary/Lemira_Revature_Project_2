@@ -27,7 +27,8 @@ public class UserRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
-	private Logger logger = LoggerFactory.getLogger(UserRepository.class);
+	@Autowired
+	private Logger logger;
 	
 	//add in fake data for now and replace with SQL later
 	List<User> users = new ArrayList<User>();
@@ -84,8 +85,6 @@ public class UserRepository {
 			throw new DatabaseException("User could not be added. Exception message is: " + e.getMessage());
 		} catch (javax.persistence.PersistenceException e) {
 			throw new DatabaseException("User could not be added because unique value already existed.");
-			//may add in some checking to see what constraint it is and send back a specific Exception to display to the user
-			//like "username/email already exists"
 		}
 	}
 	
