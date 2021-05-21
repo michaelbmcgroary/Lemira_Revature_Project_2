@@ -87,12 +87,7 @@ public class UserRepository {
 			throw new DatabaseException("User could not be added because unique value already existed.");
 		}
 	}
-	
-	/*
-	public User promoteEmployeeToModerator(LoginDTO login, int UserToPromoteID) {
-		return null;
-	}
-	*/
+
 	
 	public boolean isModerator(LoginDTO loginDTO) throws DatabaseException {
 		try {
