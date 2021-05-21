@@ -43,11 +43,8 @@ public class ReviewRepository {
 		//may replace user with a DTO that doesn't include the id
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			//Time stamp may be set before but this is a more accurate time as it will be recorded at the time it enters the database
 			review.setReviewID(0);
 			session.persist(review);
-			
-			
 			
 			@SuppressWarnings("rawtypes")
 			Query query = session.createQuery("from Review r WHERE r.user = :uid AND r.description = :desc AND r.gameID = :gid");
@@ -55,12 +52,11 @@ public class ReviewRepository {
 			query.setParameter("desc", review.getDescription());
 			query.setParameter("gid", review.getGameID());
 			Review retReview = (Review) query.getSingleResult();
-			//System.out.println("HEY PAY ATTENTION TO ME: " + retReview);
 			return retReview;
 		} catch (javax.persistence.NoResultException e) {
 			throw new DatabaseException("Review could not be added. Exception message is: " + e.getMessage());
 		} catch (javax.persistence.PersistenceException e) {
-			throw new DatabaseException("Review could not be added because unique value already existed.");
+			throw new DatabaseException(e.getCause());
 		}		
 	}
 	
@@ -120,29 +116,5 @@ public class ReviewRepository {
 		return reviewList;
 	}
 	
-	
-
-	
-	/*
-	public Blob getRecieptByID(LoginDTO login, int reviewID) throws DatabaseException, NotModeratorException, NoRecieptException {
-		try(Connection connection = ConnectionUtil.getConnection()){
-			String query = "SELECT review_reciept FROM ers_review WHERE review_id = ?";
-			PreparedStatement prepStatement = connection.prepareStatement(query);
-			prepStatement.setInt(1, reviewID);
-			ResultSet results = prepStatement.executeQuery();			
-			if (results.next()) {
-				Blob blob = results.getBlob("review_reciept");
-				if(blob.length() == 0) {
-					blob = null;
-				}
-				return blob;
-			} else {
-				throw new NoRecieptException("The requested ID has no reciept");
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException("No Database Connection");
-		} 
-	}
-	*/
 
 }

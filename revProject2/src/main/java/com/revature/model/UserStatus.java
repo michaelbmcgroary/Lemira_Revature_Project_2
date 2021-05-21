@@ -16,7 +16,6 @@ public class UserStatus {
 
 
 		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
 		@Column(name = "user_status_id")
 		private int statusID;
 		

@@ -3,6 +3,7 @@ package com.revature.model;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,11 +42,11 @@ public class User {
 	@Column(name = "user_email", length=150, unique = true)
 	private String email;
 
-	@ManyToOne
+	@ManyToOne 
 	@JoinColumn(name = "user_type_id")
 	private UserType userType;
 	
-	@ManyToOne
+	@ManyToOne 
 	@JoinColumn(name = "user_status_id")
 	private UserStatus userStatus;
 	

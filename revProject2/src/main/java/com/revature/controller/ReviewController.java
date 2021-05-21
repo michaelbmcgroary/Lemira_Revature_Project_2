@@ -106,8 +106,6 @@ public class ReviewController {
 			return ResponseEntity.status(201).body(dispReview);
 		} catch (ReviewAddException e) {
 			return ResponseEntity.status(500).body(new MessageDTO("Unable to create review in the database!"));
-		} catch (BadParameterException e) {
-			return ResponseEntity.status(400).body(new MessageDTO("User provided a bad parameter"));
 		} catch (Exception e) {
 			logger.error("An unknown error has occured on the front end\n" + e.getStackTrace().toString());
 			return ResponseEntity.status(500).body(new MessageDTO(e.getStackTrace().toString()));

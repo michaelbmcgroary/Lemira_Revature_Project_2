@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.revature.annotations.LoggedInOnly;
 import com.revature.dao.ReviewRepository;
@@ -24,6 +25,7 @@ import com.revature.exception.UserNotFoundException;
 import com.revature.model.Review;
 
 @Service
+@Transactional
 public class ReviewService {
 
 	@Autowired
@@ -42,26 +44,14 @@ public class ReviewService {
 	}
 	
 	
-	public Review postNewReview(PostReviewDTO reviewDTO) throws ReviewAddException, BadParameterException {
-		//culprit figures out which exception to throw, may add after I figure out the controller layer
-		//int culprit = 0;
+	public Review postNewReview(PostReviewDTO reviewDTO) throws ReviewAddException {
 		try {
 			Review review = new Review(reviewDTO);
-			//review.setAmount(Double.parseDouble(reviewDTO.getAmount()));
-			//keep this function commented out because I need to do string parsing
 			review = reviewRepo.newReview(review);
 			System.out.println(review);
 			return review;
 		} catch (DatabaseException e) {
 			throw new ReviewAddException(e.getMessage());
-		} catch (NumberFormatException e) {
-			//throw new BadParameterException("User provided an invalid parameter when it was supposed to be a number " + reviewDTO.getAmount());
-			//deal with number formatting when parsing strings of the game IDs and ratings
-			return null;
-			
-			
-			
-			///FIX THIS
 		}
 	}
 	
@@ -83,9 +73,6 @@ public class ReviewService {
 	
 	
 	public List<Review> getAllReviews() throws ReviewNotFoundException {
-		
-		//GET RID OF THE NEED FOR LOGIN
-		
 		List<Review> reviewList = null;
 		try {
 			reviewList = reviewRepo.getAllReviews();

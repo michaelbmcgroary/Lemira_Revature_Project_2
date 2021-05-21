@@ -1,5 +1,6 @@
 package com.revature.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Review {
 		@Column(name = "reviewID")
 		private int reviewID;
 		
-		@ManyToOne
+		@ManyToOne 
 		@JoinColumn(name = "userID")
 		private User user;
 		
@@ -34,7 +35,7 @@ public class Review {
 		@Column(name = "review_hours_played")
 		private double hoursPlayed;
 		
-		@ManyToOne
+		@ManyToOne 
 		@JoinColumn(name = "review_completion_status_id")
 		private ReviewStatus completionStatus;
 		

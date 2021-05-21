@@ -14,7 +14,6 @@ public class ReviewStatus {
 
 
 		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
 		@Column(name = "review_completion_status_id")
 		private int statusID;
 		

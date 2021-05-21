@@ -3,31 +3,19 @@ package com.revature.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.eq;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.revature.dao.UserRepository;
 import com.revature.dto.LoginDTO;
@@ -36,7 +24,6 @@ import com.revature.exception.*;
 import com.revature.model.User;
 import com.revature.model.UserStatus;
 import com.revature.model.UserType;
-import com.revature.service.LoginService;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginServiceUnitTest {
@@ -44,7 +31,6 @@ public class LoginServiceUnitTest {
 	@InjectMocks
 	
 	private static UserRepository mockUserRepository;
-	private static Session mockSession;
 	
 	@Autowired
 	private LoginService loginService;
@@ -52,7 +38,6 @@ public class LoginServiceUnitTest {
 	@BeforeAll
 	public static void setUp() throws DatabaseException, PasswordHashException, UserNotFoundException, BadPasswordException {
 		mockUserRepository = mock(UserRepository.class);
-		mockSession = mock(Session.class);
 		
 		when(mockUserRepository.getUserByUsernameAndPassword(eq(new LoginDTO("Username", "Password"))))
 			.thenReturn(new User(1, "Username", "Password", "George", "Lucas", "GLucas@gmail.com", new UserType(1), new UserStatus(1)));

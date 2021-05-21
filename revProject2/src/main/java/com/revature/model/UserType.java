@@ -14,7 +14,6 @@ public class UserType {
 
 
 		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
 		@Column(name = "user_type_id")
 		private int typeID;
 		
