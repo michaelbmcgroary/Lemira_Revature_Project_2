@@ -8,7 +8,7 @@ class ExternalRequestControllerTest {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }
