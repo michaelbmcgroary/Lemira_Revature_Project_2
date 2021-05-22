@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,8 @@ import com.revature.service.LoginService;
 @Controller
 public class LoginController {
 
-	@Autowired
-	private Logger logger;
+
+	private Logger logger = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
 	private LoginService loginService;

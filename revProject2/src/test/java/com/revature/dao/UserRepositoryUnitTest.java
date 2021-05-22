@@ -131,7 +131,6 @@ class UserRepositoryUnitTest {
 	void test_getUserIDByUsername_happy() throws DatabaseException {
 		String username = "Username3";
 		int id = userRepository.getUserIDByUsername(username);
-		
 		assertEquals(id, 1);
 	}
 	
@@ -141,7 +140,7 @@ class UserRepositoryUnitTest {
 	void test_getUserIDByUsername_UserDoesNotExist() {
 		try {
 			String username = "UsernameRay";
-			int id = userRepository.getUserIDByUsername(username);
+			userRepository.getUserIDByUsername(username);
 		} catch (DatabaseException e) {
 			String username = "UsernameRay";
 			assertEquals(e.getMessage(), "User with username " + username + " does not exist");
