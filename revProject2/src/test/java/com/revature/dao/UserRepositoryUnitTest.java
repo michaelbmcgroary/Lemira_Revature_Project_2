@@ -52,14 +52,14 @@ class UserRepositoryUnitTest {
 	void setUp() throws PasswordHashException {
 		Session session = sessionFactory.getCurrentSession();
 		
-		//session.persist(new UserStatus(1));
-		//session.persist(new UserStatus(2));
-		//session.persist(new UserType(1));
-		//session.persist(new UserType(2));
-		//session.persist(new ReviewStatus(1));
-		//session.persist(new ReviewStatus(2));
-		//session.persist(new ReviewStatus(3));
-		//session.persist(new ReviewStatus(4));
+		session.persist(new UserStatus(1));
+		session.persist(new UserStatus(2));
+		session.persist(new UserType(1));
+		session.persist(new UserType(2));
+		session.persist(new ReviewStatus(1));
+		session.persist(new ReviewStatus(2));
+		session.persist(new ReviewStatus(3));
+		session.persist(new ReviewStatus(4));
 		
 	}
 	

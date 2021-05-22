@@ -42,7 +42,6 @@ public class ReviewService {
 		try {
 			Review review = new Review(reviewDTO);
 			review = reviewRepo.newReview(review);
-			System.out.println(review);
 			return review;
 		} catch (DatabaseException e) {
 			throw new ReviewAddException(e.getMessage());
