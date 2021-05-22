@@ -50,6 +50,7 @@ public class LoginController {
 	@PostMapping(path = "login")
 	public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO){
 		try {
+			System.out.println("In controller " + loginDTO);
 			User user = null;
 			user =loginService.login(loginDTO);
 			if(user == null) {
