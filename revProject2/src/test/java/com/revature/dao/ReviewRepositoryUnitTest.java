@@ -56,7 +56,7 @@ class ReviewRepositoryUnitTest {
 	@Commit
 	void setUp() throws PasswordHashException {
 		Session session = sessionFactory.getCurrentSession();
-		
+		/*
 		session.persist(new UserStatus(1));
 		session.persist(new UserStatus(2));
 		session.persist(new UserType(1));
@@ -65,6 +65,7 @@ class ReviewRepositoryUnitTest {
 		session.persist(new ReviewStatus(2));
 		session.persist(new ReviewStatus(3));
 		session.persist(new ReviewStatus(4));
+		*/
 		session.persist(new User(0, "Username", "Password", "First", "Last", "GLucas@gmail.com", session.get(UserType.class, 1), session.get(UserStatus.class, 1)));
 	}
 	
