@@ -52,15 +52,14 @@ class UserRepositoryUnitTest {
 	void setUp() throws PasswordHashException {
 		Session session = sessionFactory.getCurrentSession();
 		
-		session.persist(new UserStatus(1));
-		session.persist(new UserStatus(2));
-		session.persist(new UserType(1));
-		session.persist(new UserType(2));
-		session.persist(new ReviewStatus(1));
-		session.persist(new ReviewStatus(2));
-		session.persist(new ReviewStatus(3));
-		session.persist(new ReviewStatus(4));
-		
+		//session.persist(new UserStatus(1));
+		//session.persist(new UserStatus(2));
+		//session.persist(new UserType(1));
+		//session.persist(new UserType(2));
+		//session.persist(new ReviewStatus(1));
+		//session.persist(new ReviewStatus(2));
+		//session.persist(new ReviewStatus(3));
+		//session.persist(new ReviewStatus(4));
 		
 	}
 	
@@ -70,10 +69,9 @@ class UserRepositoryUnitTest {
 	@Order(0)
 	@Commit
 	void test_addUser_happy() throws PasswordHashException, DatabaseException {
-		User user = new User(0, "Username3", "Password", "First", "Last", "G2Lucas@gmail.com", sessionFactory.getCurrentSession().get(UserType.class, 2), sessionFactory.getCurrentSession().get(UserStatus.class, 1));
+		User user = new User(0, "Username3", "Password", "First", "Last", "G2Lucas@gmail.com", sessionFactory.getCurrentSession().get(UserType.class, 1), sessionFactory.getCurrentSession().get(UserStatus.class, 1));
 		User newUser = userRepository.addUser(user);
-		
-		assertTrue(newUser.getUserID()==1);
+		assertEquals(newUser.getUserID(), 2);
 	}
 	
 	@Test
@@ -81,8 +79,6 @@ class UserRepositoryUnitTest {
 	@Order(1)
 	@Commit
 	void test_addUser_userAlreadyExists() throws PasswordHashException, DatabaseException {
-		
-
 		try {
 			User newUser = userRepository.addUser(sessionFactory.getCurrentSession().get(User.class, 1));
 			newUser.getUserID();
@@ -97,12 +93,8 @@ class UserRepositoryUnitTest {
 	@Order(2)
 	void test_getUserByUsernameAndPassword_happy() throws UserNotFoundException, BadPasswordException, PasswordHashException {
 		LoginDTO loginDTO = new LoginDTO("Username3","Password");
-		
 		User user = userRepository.getUserByUsernameAndPassword(loginDTO);
-		
-		
-		
-		assertTrue(user.getUsername() == "Username3");
+		assertEquals(user.getUsername(), "Username3");
 	}
 	
 	@Test
@@ -138,7 +130,7 @@ class UserRepositoryUnitTest {
 		String username = "Username3";
 		int id = userRepository.getUserIDByUsername(username);
 		
-		assertTrue(id == 1);
+		assertEquals(id, 2);
 	}
 	
 	@Test
