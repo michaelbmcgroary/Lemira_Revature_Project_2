@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,6 +37,7 @@ import com.revature.model.UserType;
 	@ContextConfiguration("classpath:dispatcherContext.xml")
 })
 @WebAppConfiguration
+@DirtiesContext
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserRepositoryUnitTest {
 	
