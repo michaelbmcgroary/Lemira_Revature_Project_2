@@ -76,25 +76,6 @@ public class UserRepository {
 	}
 
 	
-	public boolean isModerator(LoginDTO loginDTO) throws DatabaseException {
-		try {
-			Session session = sessionFactory.getCurrentSession();
-			@SuppressWarnings("rawtypes")
-			Query query = session.createQuery("select userType from User u WHERE u.username = :un AND u.password = :pw");
-			query.setParameter("un", loginDTO.getUsername());
-			query.setParameter("pw", loginDTO.getPassword());
-			UserType type = (UserType) query.getSingleResult();
-			if(type.getTypeID() == 2) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (javax.persistence.NoResultException e) {
-			throw new DatabaseException("When checking if user was a moderator, user could not be found.");
-		} 
-		
-	}
-	
 	
 	public int getUserIDByUsername(String username) throws DatabaseException {
 		try {
