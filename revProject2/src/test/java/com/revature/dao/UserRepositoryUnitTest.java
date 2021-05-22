@@ -71,7 +71,7 @@ class UserRepositoryUnitTest {
 	void test_addUser_happy() throws PasswordHashException, DatabaseException {
 		User user = new User(0, "Username3", "Password", "First", "Last", "G2Lucas@gmail.com", sessionFactory.getCurrentSession().get(UserType.class, 1), sessionFactory.getCurrentSession().get(UserStatus.class, 1));
 		User newUser = userRepository.addUser(user);
-		assertEquals(newUser.getUserID(), 2);
+		assertEquals(newUser.getUserID(), 1);
 	}
 	
 	@Test
@@ -130,7 +130,7 @@ class UserRepositoryUnitTest {
 		String username = "Username3";
 		int id = userRepository.getUserIDByUsername(username);
 		
-		assertEquals(id, 2);
+		assertEquals(id, 1);
 	}
 	
 	@Test
