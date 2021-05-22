@@ -48,15 +48,7 @@ public class UserRepository {
 			User retUser = (User) query.getSingleResult();
 			return retUser;
 		} catch (javax.persistence.NoResultException e) {
-			try {
-				Session session = sessionFactory.getCurrentSession();
-				@SuppressWarnings("rawtypes")
-				Query query = session.createQuery("from User u WHERE u.username = :un");
-				query.setParameter("un", loginDTO.getUsername());
-				throw new BadPasswordException("Password does not match username");
-			} catch (javax.persistence.NoResultException e1) {
-				throw new UserNotFoundException("User could not be found.");
-			} 
+			throw new BadPasswordException("Password does not match username");
 		} 
 	}
 	
@@ -101,13 +93,6 @@ public class UserRepository {
 			throw new DatabaseException("When checking if user was a moderator, user could not be found.");
 		} 
 		
-	}
-
-
-	public List<User> getAllUsers() {
-		Session session = sessionFactory.getCurrentSession();
-		List<User> userList = session.createQuery("from User", User.class).getResultList();
-		return userList;
 	}
 	
 	

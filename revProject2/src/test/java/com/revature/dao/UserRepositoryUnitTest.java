@@ -1,10 +1,11 @@
 package com.revature.dao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -12,54 +13,145 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import com.revature.dto.LoginDTO;
+import com.revature.exception.BadPasswordException;
+import com.revature.exception.DatabaseException;
+import com.revature.exception.PasswordHashException;
+import com.revature.exception.UserNotFoundException;
+import com.revature.model.ReviewStatus;
+import com.revature.model.User;
+import com.revature.model.UserStatus;
+import com.revature.model.UserType;
+
 
 @ExtendWith(SpringExtension.class)
 @ContextHierarchy({
 	@ContextConfiguration("classpath:applicationContext.xml"),
 	@ContextConfiguration("classpath:dispatcherContext.xml")
 })
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @WebAppConfiguration
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserRepositoryUnitTest {
-
+	
 	@Autowired
-	private UserRepository userRepo;
+	SessionFactory sessionFactory;
+	
+	@Autowired
+	private UserRepository userRepository;
 
+	
+	@BeforeEach
+	@Transactional
+	@Commit
+	void setUp() throws PasswordHashException {
+		Session session = sessionFactory.getCurrentSession();
+		
+		session.persist(new UserStatus(1));
+		session.persist(new UserStatus(2));
+		session.persist(new UserType(1));
+		session.persist(new UserType(2));
+		session.persist(new ReviewStatus(1));
+		session.persist(new ReviewStatus(2));
+		session.persist(new ReviewStatus(3));
+		session.persist(new ReviewStatus(4));
+		
+		
+	}
+	
+	
 	@Test
 	@Transactional
 	@Order(0)
-	@Rollback(false)
-	void test1() {
-		//update the name of the test to how you typically name them (check previous project for reference)
-		//create the inputs to give to the repository
-		//User user = UserRepo.addUser();
-		//assertTrue(user.getID() !=0
+	@Commit
+	void test_addUser_happy() throws PasswordHashException, DatabaseException {
+		User user = new User(0, "Username3", "Password", "First", "Last", "G2Lucas@gmail.com", sessionFactory.getCurrentSession().get(UserType.class, 2), sessionFactory.getCurrentSession().get(UserStatus.class, 1));
+		User newUser = userRepository.addUser(user);
 		
+		assertTrue(newUser.getUserID()==1);
 	}
 	
 	@Test
 	@Transactional
 	@Order(1)
-	void test2() {
-		//get user/review by ID needs to happen after the other test
-		//if the same order number is given, it works like JUnit 4 where it's random
-		//make sure to add information into the database before testing get
-		//Rollback(false) and @Commit mean that the changes won't be thrown out after the test
-		//use that to populate and the do a get test
+	@Commit
+	void test_addUser_userAlreadyExists() throws PasswordHashException, DatabaseException {
 		
-		//DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
-		//This gets rid of the current context at the end of the method and creates a new database
-		//Bach's notes have a bit more on this
+
+		try {
+			User newUser = userRepository.addUser(sessionFactory.getCurrentSession().get(User.class, 1));
+			newUser.getUserID();
+			fail("javax.persistence.PersistenceException was not thrown");
+		} catch (DatabaseException e) {
+			assertEquals(e.getMessage(), "User could not be added because unique value already existed.");
+		}
+	}
+	
+	@Test
+	@Transactional
+	@Order(2)
+	void test_getUserByUsernameAndPassword_happy() throws UserNotFoundException, BadPasswordException, PasswordHashException {
+		LoginDTO loginDTO = new LoginDTO("Username3","Password");
 		
-		//User actual = userRepo.getUserByUsernameAndPassword(null)
+		User user = userRepository.getUserByUsernameAndPassword(loginDTO);
+		
+		
+		
+		assertTrue(user.getUsername() == "Username3");
+	}
+	
+	@Test
+	@Transactional
+	@Order(3)
+	void test_getUserByUsernameAndPassword_PasswordDoesNotMatch() throws PasswordHashException, UserNotFoundException, BadPasswordException {
+		try {
+			LoginDTO loginDTO = new LoginDTO("Username3","Password3");
+			 userRepository.getUserByUsernameAndPassword(loginDTO);
+			fail("BadPasswordException not thrown");
+		} catch (BadPasswordException e) {
+			assertEquals(e.getMessage(), "Password does not match username");
+		}
 		
 	}
 	
+	
+ 
+//	@Test
+//	@Transactional
+//	
+//	@Order(4)
+//	void test_isModerator_happy() throws PasswordHashException, DatabaseException {
+//	User user = sessionFactory.getCurrentSession().get(User.class, 1);
+//	LoginDTO loginDTO = new LoginDTO("Username3","Password");
+//		userRepository.isModerator(loginDTO);
+//	}
+	
+	@Test
+	@Transactional
+	@Order(5)
+	void test_getUserIDByUsername_happy() throws DatabaseException {
+		String username = "Username3";
+		int id = userRepository.getUserIDByUsername(username);
+		
+		assertTrue(id == 1);
+	}
+	
+	@Test
+	@Transactional
+	@Order(6)
+	void test_getUserIDByUsername_UserDoesNotExist() {
+		try {
+			String username = "UsernameRay";
+			int id = userRepository.getUserIDByUsername(username);
+		} catch (DatabaseException e) {
+			String username = "UsernameRay";
+			assertEquals(e.getMessage(), "User with username " + username + " does not exist");
+		}
+	}
 
 }
