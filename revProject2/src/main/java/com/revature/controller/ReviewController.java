@@ -42,6 +42,11 @@ public class ReviewController {
 	
 	
 	private Logger logger = LoggerFactory.getLogger(ReviewController.class);
+	private String header1 = "Client-ID";
+	private String clientID = System.getenv(header1);
+	private String header2 = "Authorization";
+	private String authorization = "Bearer " + System.getenv(header2);
+	//These variables are specifically used for calling the external API known as the IGDB Games Database
 
 	@Autowired
 	private ReviewService reviewService;
@@ -63,8 +68,8 @@ public class ReviewController {
 			RequestEntity<String> request = RequestEntity
 				     .post("https://api.igdb.com/v4/games")
 				     .accept(MediaType.APPLICATION_JSON)
-				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header(header1, clientID)
+				     .header(header2, authorization)
 				     .header("User-Agent", "My own REST client")
 				     .body("where id = " + review.getGameID() + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
@@ -119,8 +124,8 @@ public class ReviewController {
 			RequestEntity<String> request = RequestEntity
 				     .post("https://api.igdb.com/v4/games")
 				     .accept(MediaType.APPLICATION_JSON)
-				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header(header1, clientID)
+				     .header(header2, authorization)
 				     .header("User-Agent", "My own REST client")
 				     .body("where id = " + gameID + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
@@ -199,8 +204,8 @@ public class ReviewController {
 				RequestEntity<String> request = RequestEntity
 					     .post("https://api.igdb.com/v4/games")
 					     .accept(MediaType.APPLICATION_JSON)
-					     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-					     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+					     .header(header1, clientID)
+					     .header(header2, authorization)
 					     .header("User-Agent", "My own REST client")
 					     .body(bodyStrings.get(m) + "; fields name, cover.image_id, cover.height, cover.width;");
 				ResponseEntity<JsonNode> response;
@@ -286,8 +291,8 @@ public class ReviewController {
 				RequestEntity<String> request = RequestEntity
 					     .post("https://api.igdb.com/v4/games")
 					     .accept(MediaType.APPLICATION_JSON)
-					     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-					     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+					     .header(header1, clientID)
+					     .header(header2, authorization)
 					     .header("User-Agent", "My own REST client")
 					     .body(bodyStrings.get(m) + "; fields name, cover.image_id, cover.height, cover.width;");
 				ResponseEntity<JsonNode> response;
@@ -361,8 +366,8 @@ public class ReviewController {
 			RequestEntity<String> request = RequestEntity
 				     .post("https://api.igdb.com/v4/games")
 				     .accept(MediaType.APPLICATION_JSON)
-				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header(header1, clientID)
+				     .header(header2, authorization)
 				     .header("User-Agent", "My own REST client")
 				     .body(bodyString + "; fields name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;

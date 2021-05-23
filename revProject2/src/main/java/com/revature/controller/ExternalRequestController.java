@@ -22,6 +22,10 @@ import com.revature.model.Game;
 @Controller
 public class ExternalRequestController {
 	
+	private String header1 = "Client-ID";
+	private String clientID = System.getenv(header1);
+	private String header2 = "Authorization";
+	private String authorization = "Bearer " + System.getenv(header2);
 
 	
 	@GetMapping(path = "game/search/{name}")
@@ -32,8 +36,8 @@ public class ExternalRequestController {
 			RequestEntity<String> request = RequestEntity
 				     .post("https://api.igdb.com/v4/games")
 				     .accept(MediaType.TEXT_PLAIN)
-				     .header("Client-ID", "j6lkdh0feenmcv3fe3sc33unavvm4j")
-				     .header("Authorization", "Bearer 3li86y7jnofe5aetw3wvnopdjxprzp")
+				     .header(header1, clientID)
+				     .header(header2, authorization)
 				     .header("User-Agent", "My own REST client")
 				     .body("search \"" + name + "\"; fields id, name, cover.image_id, cover.height, cover.width;");
 			ResponseEntity<JsonNode> response;
