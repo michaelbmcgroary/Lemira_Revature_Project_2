@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -47,19 +46,6 @@ class ReviewRepositoryUnitTest {
 	
 	@Autowired
 	private ReviewRepository reviewRepository;
-
-	
-	@BeforeEach
-	@Transactional
-	@Commit
-	@DirtiesContext
-	void setUp() throws PasswordHashException {
-		Session session = sessionFactory.getCurrentSession();
-
-		
-		
-		//session.persist(new Review(sessionFactory.getCurrentSession().get(User.class, 1), 10, "description", 5, sessionFactory.getCurrentSession().get(ReviewStatus.class, 1), 123););
-	}
 	
 	
 	@Test

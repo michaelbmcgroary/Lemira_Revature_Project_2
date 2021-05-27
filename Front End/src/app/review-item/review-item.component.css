@@ -1,0 +1,24 @@
+
+tr {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+  }
+  
+  .td {
+    flex-grow: 1;
+  }
+  
+  
+tr:nth-child(odd) {
+  background-color: #444444;
+  color:rgb(255, 255, 255);
+}
+tr:nth-child(even) {
+  background-color: #303030;
+  color:rgb(255, 255, 255);
+}
+tr:nth-child(1) {
+  background-color: #0f0f0f;
+  color:rgb(255, 255, 255);
+}

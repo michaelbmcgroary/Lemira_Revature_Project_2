@@ -93,7 +93,6 @@ public class ReviewController {
 			dispReview.setNoConnection();
 			return ResponseEntity.status(403).body(dispReview);
 		}
-		
 	}
 	
 	

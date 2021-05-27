@@ -2,7 +2,6 @@ package com.revature.dao;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -53,7 +52,6 @@ class UserRepositoryUnitTest {
 	@Commit
 	void setUp() throws PasswordHashException {
 		Session session = sessionFactory.getCurrentSession();
-		
 		session.persist(new UserStatus(1));
 		session.persist(new UserStatus(2));
 		session.persist(new UserType(1));
@@ -62,7 +60,6 @@ class UserRepositoryUnitTest {
 		session.persist(new ReviewStatus(2));
 		session.persist(new ReviewStatus(3));
 		session.persist(new ReviewStatus(4));
-		
 	}
 	
 	
@@ -112,18 +109,6 @@ class UserRepositoryUnitTest {
 		}
 		
 	}
-	
-	
- 
-//	@Test
-//	@Transactional
-//	
-//	@Order(4)
-//	void test_isModerator_happy() throws PasswordHashException, DatabaseException {
-//	User user = sessionFactory.getCurrentSession().get(User.class, 1);
-//	LoginDTO loginDTO = new LoginDTO("Username3","Password");
-//		userRepository.isModerator(loginDTO);
-//	}
 	
 	@Test
 	@Transactional

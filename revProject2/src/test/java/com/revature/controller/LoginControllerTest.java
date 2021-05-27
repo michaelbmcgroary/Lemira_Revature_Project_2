@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import static org.mockito.ArgumentMatchers.eq;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -79,8 +83,17 @@ class LoginControllerTest {
 	private MockMvc mockMvc;
 	private ObjectMapper om;
 	
+	@Autowired
+	SessionFactory sessionFactory;
+	
 	@Mock
 	LoginService loginService;
+	
+	@Mock
+	private HttpServletRequest request;
+	
+	@Mock
+	private HttpSession httpSession;
 	
 	@InjectMocks
 	LoginController loginController;
@@ -91,6 +104,8 @@ class LoginControllerTest {
 		LoginDTO login = new LoginDTO("Username", "Password");
 		User user = new User(1, "Username", "Password", "George", "Lucas", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
 		
+		when(request.getSession(true)).thenReturn(httpSession);
+		
 		when(loginService.login(eq(new LoginDTO("Username", "Password")))).thenReturn(user);
 		
 		this.mockMvc = MockMvcBuilders.standaloneSetup(loginController).build();
@@ -99,10 +114,10 @@ class LoginControllerTest {
 	
 	@Test
 	void test_login_NoIssue() throws Exception {
-		/*
+		
 		MockHttpSession session = new MockHttpSession();
-		LoginDTO login = new LoginDTO("Username", "Password");
-		String body = om.writeValueAsString(login);
+		
+		String body = "{\"username\":\"Username\",\"password\":\"Password\"}";
 		User expected = new User(1, "Username", "Password", "George", "Lucas", "GLucas@gmail.com", new UserType(1), new UserStatus(1));
 		
 		
@@ -126,7 +141,7 @@ class LoginControllerTest {
 		
 		System.out.println("100% of the time, this should display");
 		System.out.println(result.getResponse().getContentAsString());
-		*/
+		
 	}
 	
 	/*

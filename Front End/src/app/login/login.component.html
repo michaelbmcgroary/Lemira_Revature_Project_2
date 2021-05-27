@@ -1,0 +1,33 @@
+<form>
+    <div class="container column is-one-fifth">
+        <div class="field">
+            <label class="label">Username</label>
+            <div class="control ">
+                <input [(ngModel)]="usernameInput" class="input" type="text" placeholder="Text input" value="" required
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label"> Password</label>
+            <div class="control">
+                <input [(ngModel)]="passwordInput" class="input" type="password" placeholder="Text input" value=""
+                    required [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button (click)="submitButtonClick()" class="button is-link">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button is-link is-light">Cancel</button>
+            </div>
+        </div>
+
+        <div id="checkError">
+
+        </div>
+    </div>
+
+</form>

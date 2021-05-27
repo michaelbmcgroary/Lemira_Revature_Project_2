@@ -1,0 +1,21 @@
+h1{
+    text-align: center;
+    font-size: 40px;
+    color: white;
+    padding: 2%;
+    font: Impact;
+}
+
+
+tr:nth-child(odd) {
+    background-color: #444444;
+    color:rgb(255, 255, 255);
+}
+tr:nth-child(even) {
+    background-color: #303030;
+    color:rgb(255, 255, 255);
+}
+tr:nth-child(1) {
+    background-color: #0f0f0f;
+    color:rgb(255, 255, 255);
+}

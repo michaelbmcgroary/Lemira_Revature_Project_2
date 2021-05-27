@@ -1,0 +1,60 @@
+<div class="container column is-one-fifth">
+    <div class="field">
+        <label class="label">Game Name: {{gameName}}</label>
+
+    </div>
+
+    <form action="">
+        <label class="label" for="Rating">Rating (out of 10):</label>
+        <select [(ngModel)]="ratingInput" name="Rating" id="Rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+        <br><br>
+    </form>
+
+    <div class="field">
+        <label class="label">Description</label>
+        <textarea [(ngModel)]="descriptionInput" name="w3review" rows="4" cols="60" maxlength="500">
+
+        </textarea>
+    </div>
+
+    <div class="field">
+        <label class="label">Hours Played</label>
+        <div class="control ">
+            <input [(ngModel)]="hoursPlayedInput" class="input" type="email" placeholder="Hours Played" required>
+
+        </div>
+
+    </div>
+
+    <div class="field">
+        <label for="Completion" class="label">Completion</label>
+        <select [(ngModel)]="completionInput" name="Completion" id="Completion">
+            <option value="1">Played</option>
+            <option value="2">Finished</option>
+            <option value="3">Completed 100%</option>
+            <option value="4">Watched Playthrough</option>
+
+        </select>
+        <br><br>
+    </div>
+
+    <div class="field is-grouped">
+        <div class="control">
+            <button (click)="submitReview()" class="button is-link">Submit</button>
+        </div>
+        <div class="control">
+            <button class="button is-link is-light">Cancel</button>
+        </div>
+    </div>
+</div>

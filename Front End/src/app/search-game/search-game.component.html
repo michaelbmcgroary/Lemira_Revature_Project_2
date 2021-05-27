@@ -1,0 +1,45 @@
+<div class="field container column is-three-fifth">
+    <label class="label">Search Game</label>
+    <div class="control ">
+        <input [(ngModel)]="searchGameInput" class="input" type="text" placeholder="Search Game" required>
+        <button class="button" id="searchbutton" (click)="searchGame()">Submit</button>
+    </div>
+
+
+    <section class="section">
+        <div class="container">
+            <div class="b-table">
+                <div class="table-wrapper has-mobile-cards">
+                    <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th><font color="#fff">Game ID</font></th>
+                                <th><font color="#fff">Game Name</font></th>
+                                <th>
+                                    <!--game url -->
+                                </th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <ng-container *ngFor="let game of game ; let i=index ;">
+                            <tr>
+                                <td data-label="rating"> {{game.gameID}} </td>
+                                <td data-label="rating"> {{game.gameName}} </td>
+                                <td data-label="imageUrl" id="imageUrl"> <img [src]="game.thumbnailURL" width="90"
+                                        height="90"> </td>
+                                <td><button class="button is-small" (click)="readReview(i)">
+                                        Read Review
+                                    </button></td>
+                                <td><button *ngIf="isUserLoggedIn" class="button is-small" (click)="onGetInfo(i)">
+                                        Post Review
+                                    </button></td>
+                            </tr>
+                        </ng-container>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

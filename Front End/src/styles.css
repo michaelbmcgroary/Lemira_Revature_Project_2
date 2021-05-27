@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'bulma/css/bulma.min.css';
+
+html, body {
+    height: 100%;
+  }
+
+html, body{
+      background-color: #222222;
+      
+  }
+.label{
+      color: #a9a9a9;
+      background: #444444;
+  }
