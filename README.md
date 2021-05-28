@@ -22,7 +22,7 @@ GLBeat is a gaming review and list platform for dedicated players. Using GLBeat,
 * Mariadb-java-client - version 2.7.2
 * Mockito-core - version 3.9.0
 * Mockito-inline - version 3.10.0
-* Selenium-java
+* Selenium-java - version 3.141.59
 * Spring Tool Suite - version 4.10.0
 * Springframework-spring-beans - version 5.3.6
 * Springframework-spring-core - version 5.3.6
