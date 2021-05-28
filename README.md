@@ -41,7 +41,7 @@ List of features ready and TODOs for future development
 * Search-Game feature - Users can search games in the search box of a game they want to review and a table will be displayed with the search results. The users can then read reviews of that game or post a review if they are signed in.
 * View-All-Games feature - Users can view every possible review posted in the database.
 * User-Reviews feature - When signed in, users can use this feature to search existing users and read reviews they have posted
-* 
+
 To-do list:
 * Incorporate a admin authority to be able to monitor and delete posts.
 * Have a feature where users can see all the games they have favorited.
