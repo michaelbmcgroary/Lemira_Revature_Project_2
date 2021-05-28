@@ -46,7 +46,7 @@ To-do list:
 
 ## Usage
 
-2. open up your browser and go to http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080/project2/home
+2. open up your browser and go to http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080/project2/
 ![](./images/localhost7000.PNG)
 
 ## License
