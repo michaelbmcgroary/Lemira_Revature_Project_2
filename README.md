@@ -48,7 +48,7 @@ To-do list:
 
 ## Usage
 
-1. open up your browser and go to http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080/project2/home
+1. Open up your browser and go to http://ec2-52-14-217-72.us-east-2.compute.amazonaws.com:8080/project2/home
 ![](./images/glbwebsite.PNG)
 
 ## License
